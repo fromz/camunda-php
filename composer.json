@@ -1,0 +1,19 @@
+{
+    "name": "fromz/camunda-php",
+    "description": "Alternative Camunda PHP SDK",
+    "type": "library",
+    "license": "Apache 2",
+    "require": {
+        "guzzlehttp/guzzle": "~6.0"
+    },
+    "config": {
+        "platform": {
+            "php": "7.2"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Camunda\\": "src/"
+        }
+    }
+}
