@@ -6,10 +6,9 @@
  * Time: 18:05
  */
 
-namespace Camunda\Service;
+namespace Camunda\ExternalTask;
 
-use Camunda\Request\ExternalTaskRequest;
-use Camunda\Response\ExternalTask;
+use Camunda\JsonDeserializerTrait;
 
 class ExternalTaskService
 {
@@ -18,6 +17,8 @@ class ExternalTaskService
     const REQUEST_METHOD_GET = 'GET';
     const REQUEST_METHOD_POST = 'POST';
     const REQUEST_METHOD_PUT = 'PUT';
+
+    use JsonDeserializerTrait;
 
     /**
      * @var \GuzzleHttp\Client
@@ -34,20 +35,27 @@ class ExternalTaskService
      * ExternalTask interface in the engine.
      *
      * @param String $id external task id
-     * @return \Camunda\Response\ExternalTask
+     * @return ExternalTask
      * @throws \Exception
      */
-    public function getExternalTask($id)
+    public function get(string $id) : ExternalTask
     {
-        $externalTask = new ExternalTask();
-        $this->client->setRequestUrl(self::EXTERNAL_TASK_URL . $id);
-        $this->client->setRequestMethod(self::REQUEST_METHOD_GET);
-        $this->client->setRequestData(null);
-
         try {
-            return $externalTask->cast($this->client->execute());
-        } catch (\Exception $e) {
-            throw $e;
+            $response = $this->client->get(sprintf('/external-task/%s', $id));
+            return $this->deserializeJson(
+                ExternalTask::class,
+                $response->getBody()->getContents()
+            );
+        } catch (\GuzzleHttp\Exception\ClientException $clientException) {
+            if (null !== $clientException->getResponse() &&
+                404 === $clientException->getResponse()->getStatusCode()) {
+                throw new ExternalTaskNotFoundException(
+                    sprintf('Task not found: %s', $id),
+                    404,
+                    $clientException
+                );
+            }
+            throw $clientException;
         }
     }
 

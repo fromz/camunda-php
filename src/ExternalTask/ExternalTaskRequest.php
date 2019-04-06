@@ -6,7 +6,7 @@
  * Time: 18:01
  */
 
-namespace Camunda\Request;
+namespace Camunda\ExternalTask;
 
 class ExternalTaskRequest
 {
