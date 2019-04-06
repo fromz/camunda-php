@@ -9,6 +9,7 @@
 namespace Camunda\ExternalTask;
 
 use Camunda\JsonDeserializerTrait;
+use Camunda\JsonSerializerTrait;
 
 class ExternalTaskService
 {
@@ -19,6 +20,8 @@ class ExternalTaskService
     const REQUEST_METHOD_PUT = 'PUT';
 
     use JsonDeserializerTrait;
+
+    use JsonSerializerTrait;
 
     /**
      * @var \GuzzleHttp\Client
@@ -64,28 +67,21 @@ class ExternalTaskService
      * a worker. Query can be restricted to specific task topics and for each
      * task topic an individual lock time can be provided.
      *
-     * @param ExternalTaskRequest $request
-     * @return object
+     * @param FetchAndLockRequest $request
      * @throws \Exception
+     *
+     * @todo return object
      */
-    public function fetchAndLockExternalTasks(ExternalTaskRequest $request)
+    public function fetchAndLock(FetchAndLockRequest $request)
     {
-        $this->client->setRequestUrl(self::EXTERNAL_TASK_URL . 'fetchAndLock');
-        $this->client->setRequestData($request);
-        $this->client->setRequestMethod(self::REQUEST_METHOD_POST);
-
         try {
-            $prepare = $this->client->execute();
-            $response = [];
-
-            foreach ($prepare as $index => $data) {
-                $externalTask = new ExternalTask();
-                $response['external_task_' . $index] = $externalTask->cast($data);
-            }
-
-            return (object)$response;
-        } catch (\Exception $e) {
-            throw $e;
+            $response = $this->client->post('/external-task/fetchAndLock', [
+                'headers' => ['Content-Type' => 'application/json'],
+                'body' => $this->serializeToJson($request)
+            ]);
+        } catch (\GuzzleHttp\Exception\ClientException $clientException) {
+            // @todo wrap exceptions
+            throw $clientException;
         }
     }
 
@@ -93,10 +89,10 @@ class ExternalTaskService
      * Completes a task and updates process variables.
      *
      * @param $id
-     * @param ExternalTaskRequest $request
+     * @param FetchAndLockRequest $request
      * @throws \Exception
      */
-    public function handleBPMNError($id, ExternalTaskRequest $request)
+    public function handleBPMNError($id, FetchAndLockRequest $request)
     {
         $this->client->setRequestUrl(self::EXTERNAL_TASK_URL . $id . '/bpmnError');
         $this->client->setRequestMethod(self::REQUEST_METHOD_POST);
@@ -113,10 +109,10 @@ class ExternalTaskService
      * Completes an external task by id and updates process variables.
      *
      * @param $id
-     * @param ExternalTaskRequest $request
+     * @param FetchAndLockRequest $request
      * @throws \Exception
      */
-    public function completeExternalTask($id, ExternalTaskRequest $request)
+    public function completeExternalTask($id, FetchAndLockRequest $request)
     {
         $this->client->setRequestUrl(self::EXTERNAL_TASK_URL.$id.'/complete');
         $this->client->setRequestData($request);
@@ -135,10 +131,10 @@ class ExternalTaskService
      * If retries are set to 0, an incident for this task is created.
      *
      * @param $id
-     * @param ExternalTaskRequest $request
+     * @param FetchAndLockRequest $request
      * @throws \Exception
      */
-    public function externalTaskFailed($id, ExternalTaskRequest $request)
+    public function externalTaskFailed($id, FetchAndLockRequest $request)
     {
         $this->client->setRequestUrl(self::EXTERNAL_TASK_URL.$id.'/failure');
         $this->client->setRequestData($request);
