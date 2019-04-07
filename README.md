@@ -1,5 +1,5 @@
 # camunda-php
-Alternative PHP SDK for Camunda REST API. Not entirely functional. Lots of copied code from the existing SDK.
+Alternative PHP SDK for Camunda REST API. Not yet functional.
 
 ## Goals
 - PSR2 compliant
@@ -9,5 +9,4 @@ Alternative PHP SDK for Camunda REST API. Not entirely functional. Lots of copie
 - More fine-grained exception handling
 
 ## Approach
-- Copy existing Request/Response/Service code from SDK
-- Refactor a component at a time, allowing all others to be non-functional
+Take Camunda's Swagger file and perform codegen.
