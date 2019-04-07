@@ -73,6 +73,14 @@ class FetchExternalTaskTopic
     }
 
     /**
+     * @var string[]
+     */
+    public function addVariables(string $variables)
+    {
+        $this->variables[] = $variables;
+    }
+
+    /**
      * @var bool
      */
     public function setDeserializeValues(bool $deserializeValues)

@@ -105,4 +105,14 @@ class FetchAndLockRequest
     {
         return $this->topics;
     }
+
+    /**
+     * A JSON array of topic objects for which external tasks should be fetched. The returned tasks may be arbitrarily distributed among these topics. Each topic object has the following properties: Name Description topicName Mandatory. The topic's name. lockDuration Mandatory. The duration to lock the external tasks for in milliseconds. variables A JSON array of String values that represent variable names. For each result task belonging to this topic, the given variables are returned as well if they are accessible from the external task's execution. If not provided - all variables will be fetched. deserializeValues Determines whether serializable variable values (typically variables that store custom Java objects) should be deserialized on server side (default false).
+     *
+     * @var \Camunda\ExternalTask\FetchExternalTaskTopic[]
+     */
+    public function addTopics(\Camunda\ExternalTask\FetchExternalTaskTopic $topics)
+    {
+        $this->topics[] = $topics;
+    }
 }
