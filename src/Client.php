@@ -9,17 +9,16 @@
 
 namespace Camunda;
 
-use Camunda\Request\CredentialsRequest;
-use Camunda\Request\ProfileRequest;
-use Camunda\Request\VariableRequest;
-use Camunda\Response\VariableInstance;
-
 class Client
 {
     private $requestData;
-    private $requestMethod = "GET";
+
+    private $requestMethod = 'GET';
+
     private $requestUrl;
+
     private $http_status_code;
+
     private $restApiUrl;
 
     public function __construct($restApiUrl)
@@ -91,12 +90,11 @@ class Client
         return $this->http_status_code;
     }
 
-
-
     /**
-     * executes the rest request
+     * executes the rest request.
      *
      * @throws \Exception
+     *
      * @return mixed server response
      */
     public function execute()
@@ -105,7 +103,7 @@ class Client
 
         $tmp = array();
 
-        if ($this->requestMethod != 'GET') {
+        if ('GET' != $this->requestMethod) {
             // JSON Payload
             $data = json_encode($this->requestData);
         } else {
@@ -113,7 +111,7 @@ class Client
             $data = '?';
             if (isset($this->requestData)) {
                 foreach ($this->requestData->iterate() as $index => $value) {
-                    if ($value != null && !empty($value)) {
+                    if (null != $value && !empty($value)) {
                         $tmp[] = $index.'='.$value;
                     }
                 }
@@ -135,8 +133,8 @@ class Client
             $streamContext = stream_context_create(
               array(
               'http' => array(
-                'method' => 'OPTIONS'
-              )
+                'method' => 'OPTIONS',
+              ),
             )
           );
             $request = file_get_contents($this->restApiUrl.$this->requestUrl, null, $streamContext);
@@ -152,7 +150,7 @@ class Client
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Content-Type: application/json',
-            'Content-Length: '.strlen($data)
+            'Content-Length: '.strlen($data),
           ));
             $request = curl_exec($ch);
             $this->http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -164,8 +162,8 @@ class Client
                 'method' => 'DELETE',
                 'header' => 'Content-Type: application/json'."\r\n"
                 .'Content-Length:'.strlen($data)."\r\n",
-                'content' => $data
-              )
+                'content' => $data,
+              ),
             )
           );
             $request = file_get_contents($this->restApiUrl.$this->requestUrl, null, $streamContext);
@@ -181,7 +179,7 @@ class Client
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Content-Type: application/json',
-            'Content-Length: '.strlen($data)
+            'Content-Length: '.strlen($data),
           ));
 
             $request = curl_exec($ch);
@@ -194,8 +192,8 @@ class Client
                 'method' => 'PUT',
                 'header' => 'Content-Type: application/json'."\r\n"
                 .'Content-Length:'.strlen($data)."\r\n",
-                'content' => $data
-              )
+                'content' => $data,
+              ),
             )
           );
 
@@ -212,7 +210,7 @@ class Client
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Content-Type: application/json',
-            'Content-Length: '.strlen($data)
+            'Content-Length: '.strlen($data),
           ));
             $request = curl_exec($ch);
             $this->http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -224,8 +222,8 @@ class Client
                 'method' => 'POST',
                 'header' => 'Content-Type: application/json'."\r\n"
                 .'Content-Length:'.strlen($data)."\r\n",
-                'content' => $data
-              )
+                'content' => $data,
+              ),
             )
           );
 
@@ -254,23 +252,24 @@ class Client
 
         if (preg_match('/(^10|^20)[0-9]/', $this->http_status_code)) {
             $this->reset();
+
             return json_decode($request);
         } else {
             $this->reset();
-            if ($request != null && $request != "" && !empty($request)) {
+            if (null != $request && '' != $request && !empty($request)) {
                 $error = json_decode($request);
             } else {
                 $error = new \stdClass();
-                $error->type = "Not found!";
-                $error->message = "No Message!";
+                $error->type = 'Not found!';
+                $error->message = 'No Message!';
             }
-            throw new \Exception("Error! HTTP Status Code: " .$this->http_status_code. " -- ErrorType: ". $error->type . " --
-      Error Message: ". $error->message);
+            throw new \Exception('Error! HTTP Status Code: '.$this->http_status_code.' -- ErrorType: '.$error->type.' --
+      Error Message: '.$error->message);
         }
     }
 
     /**
-     * simple curl check
+     * simple curl check.
      *
      * @return bool
      */

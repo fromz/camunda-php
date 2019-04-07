@@ -8,25 +8,30 @@ class FetchExternalTaskTopic
      * @var string
      */
     private $topicName;
+
     /**
      * @var int
      */
     private $lockDuration;
+
     /**
      * @var string[]
      */
     private $variables = array();
+
     /**
      * @var bool
      */
     private $deserializeValues;
+
     /**
-     * @var string $topicName
+     * @var string
      */
     public function setTopicName(string $topicName)
     {
         $this->topicName = $topicName;
     }
+
     /**
      * @return string
      */
@@ -34,13 +39,15 @@ class FetchExternalTaskTopic
     {
         return $this->topicName;
     }
+
     /**
-     * @var int $lockDuration
+     * @var int
      */
     public function setLockDuration(int $lockDuration)
     {
         $this->lockDuration = $lockDuration;
     }
+
     /**
      * @return int
      */
@@ -48,13 +55,15 @@ class FetchExternalTaskTopic
     {
         return $this->lockDuration;
     }
+
     /**
-     * @var string[] $variables
+     * @var string[]
      */
     public function setVariables(array $variables)
     {
         $this->variables = $variables;
     }
+
     /**
      * @return string[]
      */
@@ -62,13 +71,15 @@ class FetchExternalTaskTopic
     {
         return $this->variables;
     }
+
     /**
-     * @var bool $deserializeValues
+     * @var bool
      */
     public function setDeserializeValues(bool $deserializeValues)
     {
         $this->deserializeValues = $deserializeValues;
     }
+
     /**
      * @return bool
      */

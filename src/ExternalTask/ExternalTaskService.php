@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: kushalhalder
  * Date: 2019-01-22
- * Time: 18:05
+ * Time: 18:05.
  */
 
 namespace Camunda\ExternalTask;
@@ -13,10 +13,12 @@ use Camunda\JsonSerializerTrait;
 
 class ExternalTaskService
 {
-    const EXTERNAL_TASK_URL= '/external-task/';
+    const EXTERNAL_TASK_URL = '/external-task/';
 
     const REQUEST_METHOD_GET = 'GET';
+
     const REQUEST_METHOD_POST = 'POST';
+
     const REQUEST_METHOD_PUT = 'PUT';
 
     use JsonDeserializerTrait;
@@ -37,14 +39,17 @@ class ExternalTaskService
      * Retrieves an external task by id, corresponding to the
      * ExternalTask interface in the engine.
      *
-     * @param String $id external task id
+     * @param string $id external task id
+     *
      * @return ExternalTask
+     *
      * @throws \Exception
      */
-    public function get(string $id) : ExternalTask
+    public function get(string $id): ExternalTask
     {
         try {
             $response = $this->client->get(sprintf('/external-task/%s', $id));
+
             return $this->deserializeJson(
                 ExternalTask::class,
                 $response->getBody()->getContents()
@@ -68,6 +73,7 @@ class ExternalTaskService
      * task topic an individual lock time can be provided.
      *
      * @param FetchAndLockRequest $request
+     *
      * @throws \Exception
      *
      * @todo return object
@@ -77,7 +83,7 @@ class ExternalTaskService
         try {
             $response = $this->client->post('/external-task/fetchAndLock', [
                 'headers' => ['Content-Type' => 'application/json'],
-                'body' => $this->serializeToJson($request)
+                'body' => $this->serializeToJson($request),
             ]);
         } catch (\GuzzleHttp\Exception\ClientException $clientException) {
             // @todo wrap exceptions
@@ -90,11 +96,12 @@ class ExternalTaskService
      *
      * @param $id
      * @param FetchAndLockRequest $request
+     *
      * @throws \Exception
      */
     public function handleBPMNError($id, FetchAndLockRequest $request)
     {
-        $this->client->setRequestUrl(self::EXTERNAL_TASK_URL . $id . '/bpmnError');
+        $this->client->setRequestUrl(self::EXTERNAL_TASK_URL.$id.'/bpmnError');
         $this->client->setRequestMethod(self::REQUEST_METHOD_POST);
         $this->client->setRequestData($request);
 
@@ -110,6 +117,7 @@ class ExternalTaskService
      *
      * @param $id
      * @param FetchAndLockRequest $request
+     *
      * @throws \Exception
      */
     public function completeExternalTask($id, FetchAndLockRequest $request)
@@ -132,6 +140,7 @@ class ExternalTaskService
      *
      * @param $id
      * @param FetchAndLockRequest $request
+     *
      * @throws \Exception
      */
     public function externalTaskFailed($id, FetchAndLockRequest $request)

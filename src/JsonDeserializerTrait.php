@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: fromz
  * Date: 7/04/19
- * Time: 7:03 AM
+ * Time: 7:03 AM.
  */
 
 namespace Camunda;
@@ -14,16 +14,18 @@ use Symfony\Component\Serializer\Serializer;
 
 trait JsonDeserializerTrait
 {
-    protected function getJsonDeserializer() : Serializer
+    protected function getJsonDeserializer(): Serializer
     {
         $encoders = [new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
+
         return new Serializer($normalizers, $encoders);
     }
 
     /**
      * @param string $class
      * @param string $data
+     *
      * @return mixed
      */
     protected function deserializeJson(string $class, string $data)
