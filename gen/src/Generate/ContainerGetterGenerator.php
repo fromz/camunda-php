@@ -32,6 +32,7 @@ class ContainerGetterGenerator
         $factory = new BuilderFactory;
         return $factory->method('get' . ucfirst($child->getName()))
             ->makePublic()
+            ->setDocComment($this->getDocblock($child->getProperty())->generateDocBlock())
             ->addStmt(
                 new Node\Stmt\Return_(new Node\Expr\PropertyFetch(new Node\Expr\Variable('this'), $child->getName()))
             );
@@ -43,7 +44,7 @@ class ContainerGetterGenerator
         if (null !== $property->getDescription()) {
             $db->addComment($property->getDescription());
         }
-        $db->addComment(sprintf('@var %s', $this->getDocblockType($property)));
+        $db->addComment(sprintf('@return %s', $this->getDocblockType($property)));
         return $db;
     }
 
@@ -57,7 +58,7 @@ class ContainerGetterGenerator
         switch (get_class($property)) {
             case \Gen\Entity\Container::class:
                 return sprintf(
-                    '%s\%s',
+                    '\%s\%s',
                     $this->context->getMap()[$property->getSchemaReference()]['namespace'],
                     $this->context->getMap()[$property->getSchemaReference()]['class']
                 );

@@ -35,19 +35,20 @@ class ContainerSetterGenerator
         return $factory->method('set' . ucfirst($child->getName()))
             ->makePublic()
             ->addParam($factory->param($child->getName())->setType($this->getVariableType($child->getProperty())))
+            ->setDocComment($this->getDocblock($child)->generateDocBlock())
             ->addStmt(
                 new Node\Stmt\Expression(new Node\Expr\Assign(new Node\Expr\Variable('this->' . $child->getName()), new Node\Expr\Variable($child->getName())))
             );
     }
 
 
-    function getVariableType(\Gen\Entity\PropertyInterface $property)
+    private function getVariableType(\Gen\Entity\PropertyInterface $property)
     {
         switch (get_class($property)) {
             case \Gen\Entity\Container::class:
                 /* @var $property \Gen\Entity\Container */
                 return sprintf(
-                    '%s\%s',
+                    '\%s\%s',
                     $this->map[$property->getSchemaReference()]['namespace'],
                     $this->map[$property->getSchemaReference()]['class']
                 );
@@ -67,18 +68,18 @@ class ContainerSetterGenerator
         return 'Unknown type';
     }
 
-    function getDocblock(\Gen\Entity\PropertyInterface $property) : \Gen\DocBlock
+    private function getDocblock(ContainerChild $child) : \Gen\DocBlock
     {
         $db = new \Gen\DocBlock();
-        if (null !== $property->getDescription()) {
-            $db->addComment($property->getDescription());
+        if (null !== $child->getProperty()->getDescription()) {
+            $db->addComment($child->getProperty()->getDescription());
         }
-        $db->addComment(sprintf('@var %s', $this->getDocblockType($property)));
+        $db->addComment(sprintf('@var %s $%s', $this->getDocblockType($child->getProperty()), $child->getName()));
         return $db;
     }
 
 
-    function getDocblockType(\Gen\Entity\PropertyInterface $property)
+    private function getDocblockType(\Gen\Entity\PropertyInterface $property)
     {
         $nullable = '';
         if (true === $property->getNullable()) {
@@ -87,7 +88,7 @@ class ContainerSetterGenerator
         switch (get_class($property)) {
             case \Gen\Entity\Container::class:
                 return sprintf(
-                    '%s\%s',
+                    '\%s\%s',
                     $this->context->getMap()[$property->getSchemaReference()]['namespace'],
                     $this->context->getMap()[$property->getSchemaReference()]['class']
                 );

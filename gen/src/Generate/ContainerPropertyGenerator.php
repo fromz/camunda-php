@@ -63,7 +63,7 @@ class ContainerPropertyGenerator
         switch (get_class($property)) {
             case \Gen\Entity\Container::class:
                 return sprintf(
-                    '%s\%s',
+                    '\%s\%s',
                     $this->context->getMap()[$property->getSchemaReference()]['namespace'],
                     $this->context->getMap()[$property->getSchemaReference()]['class']
                 );
