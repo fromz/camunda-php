@@ -19,13 +19,18 @@ $map = [
     ],
 ];
 
+$context = new \Gen\Generate\Context();
+$context->setMap($map);
+
 $srcDir = '../src';
 
 $schemaConverter = new \Gen\SchemaConverter($document);
-$genContainer = new \Gen\GenContainer($map);
+$genContainer = new \Gen\Generate\ContainerGenerator($context);
 foreach ($map as $schema => $generatorDetails) {
     $container = $schemaConverter->convertReferenceToContainer($schema);
     $node = $genContainer->generate($schema, $container);
+
+    // Write the contents to disk
     $stmts = array($node->getNode());
     $prettyPrinter = new PrettyPrinter\Standard();
     $fileContents = $prettyPrinter->prettyPrintFile($stmts);
