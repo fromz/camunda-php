@@ -9,6 +9,7 @@
 namespace Gen\Generate;
 
 
+use Gen\Entity\Container;
 use Gen\Entity\ContainerChild;
 use PhpParser\Builder\Method;
 use PhpParser\Node;
@@ -27,7 +28,7 @@ class ContainerSetterGenerator
         $this->context = $context;
     }
 
-    public function generateSetter(ContainerChild $child) : Method
+    public function generateSetter(Container $container, ContainerChild $child) : Method
     {
         $factory = new BuilderFactory;
 
@@ -35,10 +36,16 @@ class ContainerSetterGenerator
         return $factory->method('set' . ucfirst($child->getName()))
             ->makePublic()
             ->addParam($factory->param($child->getName())->setType($this->getVariableType($child->getProperty())))
-            ->setDocComment($this->getDocblock($child)->generateDocBlock())
+            ->setDocComment($this->getDocblock($container, $child)->generateDocBlock())
             ->addStmt(
                 new Node\Stmt\Expression(new Node\Expr\Assign(new Node\Expr\Variable('this->' . $child->getName()), new Node\Expr\Variable($child->getName())))
-            );
+            )
+            ->addStmt(
+                new Node\Stmt\Return_(new Node\Expr\Variable('this'))
+            )
+            ->setReturnType('self')
+        ;
+
     }
 
 
@@ -68,13 +75,14 @@ class ContainerSetterGenerator
         return 'Unknown type';
     }
 
-    private function getDocblock(ContainerChild $child) : \Gen\DocBlock
+    private function getDocblock(Container $container, ContainerChild $child) : \Gen\DocBlock
     {
         $db = new \Gen\DocBlock();
         if (null !== $child->getProperty()->getDescription()) {
             $db->addComment($child->getProperty()->getDescription());
         }
         $db->addComment(sprintf('@var %s $%s', $this->getDocblockType($child->getProperty()), $child->getName()));
+        $db->addComment(sprintf('@return %s', $container->getClass()));
         return $db;
     }
 

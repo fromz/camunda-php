@@ -26,10 +26,14 @@ class FetchExternalTaskTopic
 
     /**
      * @var string
+     *
+     * @return FetchExternalTaskTopic
      */
-    public function setTopicName(string $topicName)
+    public function setTopicName(string $topicName): self
     {
         $this->topicName = $topicName;
+
+        return $this;
     }
 
     /**
@@ -42,10 +46,14 @@ class FetchExternalTaskTopic
 
     /**
      * @var int
+     *
+     * @return FetchExternalTaskTopic
      */
-    public function setLockDuration(int $lockDuration)
+    public function setLockDuration(int $lockDuration): self
     {
         $this->lockDuration = $lockDuration;
+
+        return $this;
     }
 
     /**
@@ -58,10 +66,14 @@ class FetchExternalTaskTopic
 
     /**
      * @var string[]
+     *
+     * @return FetchExternalTaskTopic
      */
-    public function setVariables(array $variables)
+    public function setVariables(array $variables): self
     {
         $this->variables = $variables;
+
+        return $this;
     }
 
     /**
@@ -74,18 +86,26 @@ class FetchExternalTaskTopic
 
     /**
      * @var string[]
+     *
+     * @return FetchExternalTaskTopic
      */
-    public function addVariables(string $variables)
+    public function addVariables(string $variables): self
     {
         $this->variables[] = $variables;
+
+        return $this;
     }
 
     /**
      * @var bool
+     *
+     * @return FetchExternalTaskTopic
      */
-    public function setDeserializeValues(bool $deserializeValues)
+    public function setDeserializeValues(bool $deserializeValues): self
     {
         $this->deserializeValues = $deserializeValues;
+
+        return $this;
     }
 
     /**

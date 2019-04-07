@@ -10,6 +10,17 @@ namespace Gen\Entity;
 
 class Container extends AbstractProperty implements PropertyInterface
 {
+
+    /**
+     * @var string
+     */
+    private $namespace;
+
+    /**
+     * @var string
+     */
+    private $class;
+
     /**
      * @var string
      */
@@ -56,6 +67,40 @@ class Container extends AbstractProperty implements PropertyInterface
         $this->schemaReference = $schemaReference;
     }
 
+    /**
+     * @return string
+     */
+    public function getNamespace(): string
+    {
+        return $this->namespace;
+    }
 
+    /**
+     * @param string $namespace
+     * @return Container
+     */
+    public function setNamespace(string $namespace): Container
+    {
+        $this->namespace = $namespace;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClass(): string
+    {
+        return $this->class;
+    }
+
+    /**
+     * @param string $class
+     * @return Container
+     */
+    public function setClass(string $class): Container
+    {
+        $this->class = $class;
+        return $this;
+    }
 
 }

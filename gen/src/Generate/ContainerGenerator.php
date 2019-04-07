@@ -56,12 +56,15 @@ class ContainerGenerator
         $node = $factory->namespace($this->context->getMap()[$schemaName]['namespace']);
         $class = $factory->class($this->context->getMap()[$schemaName]['class']);
 
+        $container->setNamespace($this->context->getMap()[$schemaName]['namespace']);
+        $container->setClass($this->context->getMap()[$schemaName]['class']);
+
         foreach ($container->getChildren() as $child) {
             $class->addStmt($this->containerPropertyGenerator->generateProperty($child));
-            $class->addStmt($this->containerSetterGenerator->generateSetter($child));
+            $class->addStmt($this->containerSetterGenerator->generateSetter($container, $child));
             $class->addStmt($this->containerGetterGenerator->generateGetter($child));
             if ($child->getProperty() instanceof ArrayProperty) {
-                $class->addStmt($this->containerAdderGenerator->generateAdder($child));
+                $class->addStmt($this->containerAdderGenerator->generateAdder($container, $child));
             }
         }
 
