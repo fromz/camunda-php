@@ -6,8 +6,7 @@
     "require": {
         "guzzlehttp/guzzle": "~6.0",
         "symfony/serializer": "^4.2",
-        "symfony/property-access": "^4.2",
-        "thefrozenfire/swagger": "^2.0"
+        "symfony/property-access": "^4.2"
     },
     "config": {
         "platform": {

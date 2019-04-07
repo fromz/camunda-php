@@ -1,7 +1,6 @@
 <?php
 namespace Camunda;
 
-
 class GuzzleFetcher
 {
     /**

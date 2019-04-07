@@ -1,148 +1,58 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kushalhalder
- * Date: 2019-01-22
- * Time: 18:01
- */
 
 namespace Camunda\ExternalTask;
 
 class FetchAndLockRequest
 {
-
     /**
-     * The id of the worker on which behalf tasks are fetched. The returned
-     * tasks are locked for that worker and can only be completed when
-     * providing the same worker id.
-     * @var string
-     */
-    protected $workerId;
-
-    /**
-     * The maximum number of tasks to return.
+     * Mandatory. The maximum number of tasks to return.
      * @var int
      */
-    protected $maxTasks;
-
+    private $maxTasks;
     /**
-     * A boolean value, which indicates whether the task should be fetched
-     * based on its priority or arbitrarily.
+     * Mandatory. The id of the worker on which behalf tasks are fetched. The returned tasks are locked for that worker and can only be completed when providing the same worker id.
+     * @var string
+     */
+    private $workerId;
+    /**
      * @var bool
      */
-    protected $usePriority = false;
-
+    private $usePriority;
     /**
-     * The Long Polling timeout in milliseconds.
-     * Note: The value cannot be set larger than 1.800.000 milliseconds (corresponds to 30 minutes).
-     *
-     * @var int|null
+     * A JSON array of topic objects for which external tasks should be fetched. The returned tasks may be arbitrarily distributed among these topics. Each topic object has the following properties: Name Description topicName Mandatory. The topic's name. lockDuration Mandatory. The duration to lock the external tasks for in milliseconds. variables A JSON array of String values that represent variable names. For each result task belonging to this topic, the given variables are returned as well if they are accessible from the external task's execution. If not provided - all variables will be fetched. deserializeValues Determines whether serializable variable values (typically variables that store custom Java objects) should be deserialized on server side (default false).
+     * @var \Camunda\ExternalTask\FetchExternalTaskTopic[]
      */
-    protected $asyncResponseTimeout;
-
-    /**
-     * A JSON array of topic objects for which external tasks should be
-     * fetched. The returned tasks may be arbitrarily distributed among
-     * these topics.
-     *
-     * @var FetchAndLockRequestTopic[]
-     */
-    protected $topics = [];
-
-    /**
-     * @return string
-     */
-    public function getWorkerId(): string
+    private $topics = array();
+    public function setMaxTasks(int $maxTasks)
     {
-        return $this->workerId;
+        $this->maxTasks = $maxTasks;
     }
-
-    /**
-     * @param string $workerId
-     * @return FetchAndLockRequest
-     */
-    public function setWorkerId(string $workerId): FetchAndLockRequest
-    {
-        $this->workerId = $workerId;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getMaxTasks(): int
+    public function getMaxTasks()
     {
         return $this->maxTasks;
     }
-
-    /**
-     * @param int $maxTasks
-     * @return FetchAndLockRequest
-     */
-    public function setMaxTasks(int $maxTasks): FetchAndLockRequest
+    public function setWorkerId(string $workerId)
     {
-        $this->maxTasks = $maxTasks;
-        return $this;
+        $this->workerId = $workerId;
     }
-
-    /**
-     * @return bool
-     */
-    public function isUsePriority(): bool
+    public function getWorkerId()
+    {
+        return $this->workerId;
+    }
+    public function setUsePriority(bool $usePriority)
+    {
+        $this->usePriority = $usePriority;
+    }
+    public function getUsePriority()
     {
         return $this->usePriority;
     }
-
-    /**
-     * @param bool $usePriority
-     * @return FetchAndLockRequest
-     */
-    public function setUsePriority(bool $usePriority): FetchAndLockRequest
+    public function setTopics(array $topics)
     {
-        $this->usePriority = $usePriority;
-        return $this;
+        $this->topics = $topics;
     }
-
-    /**
-     * @return int|null
-     */
-    public function getAsyncResponseTimeout(): ?int
-    {
-        return $this->asyncResponseTimeout;
-    }
-
-    /**
-     * @param int|null $asyncResponseTimeout
-     * @return FetchAndLockRequest
-     */
-    public function setAsyncResponseTimeout(?int $asyncResponseTimeout): FetchAndLockRequest
-    {
-        $this->asyncResponseTimeout = $asyncResponseTimeout;
-        return $this;
-    }
-
-    /**
-     * @return FetchAndLockRequestTopic[]
-     */
-    public function getTopics(): array
+    public function getTopics()
     {
         return $this->topics;
     }
-
-    /**
-     * @param FetchAndLockRequestTopic[] $topics
-     * @return FetchAndLockRequest
-     */
-    public function setTopics(array $topics): FetchAndLockRequest
-    {
-        $this->topics = $topics;
-        return $this;
-    }
-
-
-    public function addTopic(FetchAndLockRequestTopic $topic)
-    {
-        $this->topics[] = $topic;
-    }
-
 }
