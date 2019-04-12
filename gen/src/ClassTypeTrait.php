@@ -22,6 +22,11 @@ trait ClassTypeTrait
     private $class;
 
     /**
+     * @var ClassTypeInterface
+     */
+    private $extends;
+
+    /**
      * @return string
      */
     public function getNamespace(): string
@@ -54,6 +59,24 @@ trait ClassTypeTrait
     public function setClass(string $class): self
     {
         $this->class = $class;
+        return $this;
+    }
+
+    /**
+     * @return ClassTypeInterface
+     */
+    public function getExtends(): ClassTypeInterface
+    {
+        return $this->extends;
+    }
+
+    /**
+     * @param ClassTypeInterface $extends
+     * @return ClassTypeTrait
+     */
+    public function setExtends(ClassTypeInterface $extends): ClassTypeTrait
+    {
+        $this->extends = $extends;
         return $this;
     }
 

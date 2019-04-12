@@ -17,6 +17,8 @@ use PhpParser\BuilderFactory;
 class ContainerGenerator
 {
 
+    private $classGenerator;
+
     /**
      * @var ContainerPropertyGenerator
      */
@@ -39,6 +41,7 @@ class ContainerGenerator
 
     public function __construct()
     {
+        $this->classGenerator = new ClassGenerator();
         $this->containerPropertyGenerator = new ContainerPropertyGenerator();
         $this->containerSetterGenerator = new ContainerSetterGenerator();
         $this->containerGetterGenerator = new ContainerGetterGenerator();
@@ -49,7 +52,8 @@ class ContainerGenerator
     {
         // Build the code
         $factory = new BuilderFactory;
-        $node = $factory->namespace($container->getNamespace());
+        $namespace = $factory->namespace($container->getNamespace());
+        $this->classGenerator->generate($container);
         $class = $factory->class($container->getClass());
 
         foreach ($container->getChildren() as $child) {
@@ -61,9 +65,9 @@ class ContainerGenerator
             }
         }
 
-        $node->addStmt($class);
+        $namespace->addStmt($class);
 
-        return $node;
+        return $namespace;
     }
 
 }

@@ -11,6 +11,7 @@ namespace Gen\Service;
 
 use Gen\Entity\Container;
 use Gen\Entity\PropertyInterface;
+use Gen\Generate\ExceptionGenerator;
 use Gen\SwaggerAdapter\EndpointConfig;
 
 class EndpointDefinition
@@ -31,11 +32,6 @@ class EndpointDefinition
     private $pathParameters;
 
     /**
-     * @var array
-     */
-    private $responseCodes;
-
-    /**
      * @var string
      */
     private $path;
@@ -49,6 +45,16 @@ class EndpointDefinition
      * @var Container[]
      */
     private $referencedContainers = [];
+
+    /**
+     * @var ResponseInterface[]
+     */
+    private $responses = [];
+
+    public function addResponse(int $responseCode, ResponseInterface $response)
+    {
+        $this->responses[$responseCode] = $response;
+    }
 
     /**
      * @return string
@@ -120,11 +126,6 @@ class EndpointDefinition
         $this->requestParameters = $requestParameters;
     }
 
-    public function mapResponseCode(int $code, $response)
-    {
-        $this->responseCodes[$code] = $response;
-    }
-
     /**
      * @return PropertyInterface[]
      */
@@ -153,27 +154,47 @@ class EndpointDefinition
 
     public function write()
     {
-        $containerWriter = new \Gen\ClassTypeWriter('../src');
+        $classTypeWriter = new \Gen\ClassTypeWriter('../src');
 
         if (null !== $this->requestParameters) {
             $genContainer = new \Gen\Generate\ContainerGenerator();
             $node = $genContainer->generate($this->getRequestParameters());
-            $dest = $containerWriter->write($this->getRequestParameters(), $node);
+            $dest = $classTypeWriter->write($this->getRequestParameters(), $node);
             echo $dest . "\n";
         }
 
         if (null !== $this->queryParameters) {
             $genContainer = new \Gen\Generate\ContainerGenerator();
             $node = $genContainer->generate($this->getQueryParameters());
-            $dest = $containerWriter->write($this->getQueryParameters(), $node);
+            $dest = $classTypeWriter->write($this->getQueryParameters(), $node);
             echo $dest . "\n";
         }
 
         foreach ($this->referencedContainers as $container) {
             $genContainer = new \Gen\Generate\ContainerGenerator();
             $node = $genContainer->generate($container);
-            $dest = $containerWriter->write($container, $node);
+            $dest = $classTypeWriter->write($container, $node);
             echo $dest . "\n";
+        }
+
+        // Generate response entities
+        foreach ($this->responses as $code => $response) {
+            switch (get_class($response)) {
+                case ResponseContent::class:
+                    /* @var $response ResponseContent */
+                    $genContainer = new \Gen\Generate\ContainerGenerator();
+                    $node = $genContainer->generate($response);
+                    $dest = $classTypeWriter->write($this->getQueryParameters(), $node);
+                    echo $dest . "\n";
+                    break;
+                case ResponseException::class:
+                    /* @var $response ResponseException */
+                    $exceptionGenerator = new ExceptionGenerator();
+                    $ns = $exceptionGenerator->generate($response);
+                    $classTypeWriter->write($response, $ns);
+                    echo $dest . "\n";
+                    break;
+            }
         }
     }
 
