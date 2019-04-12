@@ -19,6 +19,6 @@ class ConcreteException implements ClassTypeInterface
     public function __construct()
     {
         $this->setClass('Exception');
-        $this->setNamespace('\\');
+        $this->setNamespace('');
     }
 }

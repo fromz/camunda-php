@@ -22,4 +22,16 @@ class ResponseContent extends Container implements ResponseInterface
     {
         return true;
     }
+
+    private $isArray = false;
+
+    public function setIsArray()
+    {
+        $this->isArray = true;
+    }
+
+    public function isArray() : bool
+    {
+        return $this->isArray;
+    }
 }

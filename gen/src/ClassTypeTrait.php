@@ -62,6 +62,11 @@ trait ClassTypeTrait
         return $this;
     }
 
+    public function getFqn() : string
+    {
+        return sprintf('%s\%s', $this->getNamespace(), $this->getClass());
+    }
+
     /**
      * @return ClassTypeInterface
      */
@@ -74,10 +79,15 @@ trait ClassTypeTrait
      * @param ClassTypeInterface $extends
      * @return ClassTypeTrait
      */
-    public function setExtends(ClassTypeInterface $extends): ClassTypeTrait
+    public function setExtends(ClassTypeInterface $extends): self
     {
         $this->extends = $extends;
         return $this;
+    }
+
+    public function hasExtends() : bool
+    {
+        return $this->extends !== null;
     }
 
 }

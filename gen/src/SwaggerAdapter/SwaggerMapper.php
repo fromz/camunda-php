@@ -8,8 +8,10 @@
 
 namespace Gen\SwaggerAdapter;
 
+use Gen\Exception;
 use Gen\Service\EndpointDefinition;
 use Gen\Service\QueryParameters;
+use Gen\Service\ResponseContent;
 
 class SwaggerMapper
 {
@@ -53,6 +55,28 @@ class SwaggerMapper
 
         foreach ($config->getRequestSchemaReferences() as $schemaReference) {
             $endpointDefinition->addReferencedContainer($schemaReference->getContainer());
+        }
+
+        foreach ($config->getResponseCodesAs() as $responseCode => $responseType) {
+            $responses = $op->getResponses();
+            /* @var $responses \Swagger\Object\Responses */
+            if ($responseType instanceof ResponseContent) {
+                $schemaConverter = new \Gen\SwaggerAdapter\SchemaConverter($this->document, $config->getRequestSchemaReferences());
+                $r = $responses->getItem($responseCode);
+                /* @var $r \Swagger\Object\Response */
+                $schema = $r->getSchema();
+                /* @var $schema \Swagger\Object\Schema */
+                switch ($schema->getType()) {
+                    case 'array':
+                        $items = $schema->getItems();
+                        /* @var $items \Swagger\Object\Items */
+                        $schemaConverter->applySchemaPropertiesToResponseContent($responseType, $items->getDocument()->{'$ref'});
+                        break;
+                    default:
+                        throw new Exception("dont know how to map this type %s", $schema->getType());
+                }
+            }
+            $endpointDefinition->addResponse($responseCode, $responseType);
         }
 
         return $endpointDefinition;

@@ -21,8 +21,7 @@ class ExceptionGenerator
         // Build the code
         $factory = new BuilderFactory;
         $namespace = $factory->namespace($responseException->getNamespace());
-        $classGenerator->generate($responseException);
-        $class = $factory->class($responseException->getClass());
+        $class = $classGenerator->generate($responseException);
         $namespace->addStmt($class);
         return $namespace;
     }

@@ -32,23 +32,25 @@ $mapper = new \Gen\SwaggerAdapter\SwaggerMapper($document);
 //  maps response codes to ResponseType (Exception,ResponseContent)
 $endpoint = $mapper->pathToEndpoint('/external-task', 'get',
     (new \Gen\SwaggerAdapter\EndpointConfig())
-        ->setQueryParamsAs((new \Gen\Service\QueryParameters())->setNamespace('Camunda\ExternalTask')->setClass('GetExternalTaskQueryParams'))
+        ->setQueryParamsAs((new \Gen\Service\QueryParameters())->setNamespace('\Camunda\ExternalTask')->setClass('GetExternalTaskQueryParams'))
+        ->addResponseCodeAs(200, (new \Gen\Service\ResponseContent())->setNamespace('\Camunda\ExternalTask')->setClass('GetExternalTaskResponse'))
+        ->addResponseCodeAs(400, (new \Gen\Service\ResponseException())->setNamespace('\Camunda\ExternalTask')->setClass('GetExternalTaskResponseException'))
 );
 $endpoint->write();
 
 
-$endpoint = $mapper->pathToEndpoint('/external-task/fetchAndLock', 'post',
-    (new \Gen\SwaggerAdapter\EndpointConfig())
-        ->setRequestParametersAs(
-            (new \Gen\Service\RequestParameters())->setNamespace('Camunda\ExternalTask')->setClass('FetchAndLockRequestBody'),
-            [
-                new \Gen\SwaggerAdapter\SchemaReference(
-                    '#/definitions/FetchExternalTaskTopicDto',
-                    (new \Gen\Service\RequestParameters())->setNamespace('Camunda\ExternalTask')->setClass('FetchAndLockRequestBodyTopic')
-                ),
-            ]
-        )
-);
-$endpoint->write();
+//$endpoint = $mapper->pathToEndpoint('/external-task/fetchAndLock', 'post',
+//    (new \Gen\SwaggerAdapter\EndpointConfig())
+//        ->setRequestParametersAs(
+//            (new \Gen\Service\RequestParameters())->setNamespace('Camunda\ExternalTask')->setClass('FetchAndLockRequestBody'),
+//            [
+//                new \Gen\SwaggerAdapter\SchemaReference(
+//                    '#/definitions/FetchExternalTaskTopicDto',
+//                    (new \Gen\Service\RequestParameters())->setNamespace('Camunda\ExternalTask')->setClass('FetchAndLockRequestBodyTopic')
+//                ),
+//            ]
+//        )
+//);
+//$endpoint->write();
 
 // Fetch endpoint request parameters

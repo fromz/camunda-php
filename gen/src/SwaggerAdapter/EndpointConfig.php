@@ -12,6 +12,7 @@ namespace Gen\SwaggerAdapter;
 use Gen\Entity\Container;
 use Gen\Service\QueryParameters;
 use Gen\Service\RequestParameters;
+use Gen\Service\ResponseInterface;
 
 class EndpointConfig
 {
@@ -29,6 +30,25 @@ class EndpointConfig
      * @var SchemaReference[]
      */
     private $requestSchemaReferences = [];
+
+    /**
+     * @var ResponseInterface[]
+     */
+    private $responseCodeAs = [];
+
+    public function addResponseCodeAs(int $responseCode, ResponseInterface $response) : EndpointConfig
+    {
+        $this->responseCodeAs[$responseCode] = $response;
+        return $this;
+    }
+
+    /**
+     * @return ResponseInterface[]
+     */
+    public function getResponseCodesAs()
+    {
+        return $this->responseCodeAs;
+    }
 
     /**
      * @return QueryParameters

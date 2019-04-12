@@ -11,6 +11,7 @@ namespace Gen\SwaggerAdapter;
 use Gen\Entity;
 use Exception;
 use Gen\Service\RequestParameters;
+use Gen\Service\ResponseContent;
 use http\Env\Request;
 
 class SchemaConverter
@@ -29,6 +30,11 @@ class SchemaConverter
     {
         $this->document = $document;
         $this->schemaReferences = $schemaReferences;
+    }
+
+    public function applySchemaPropertiesToResponseContent(ResponseContent $container, string $schemaReference) : ResponseContent {
+        $this->applySchemaPropertiesToContainer($container, $schemaReference);
+        return $container;
     }
 
     public function applySchemaPropertiesToRequestParameters(RequestParameters $container, string $schemaReference) : RequestParameters {

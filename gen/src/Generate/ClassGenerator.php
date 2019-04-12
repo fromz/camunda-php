@@ -20,7 +20,9 @@ class ClassGenerator
         // Build the code
         $factory = new BuilderFactory;
         $class = $factory->class($classType->getClass());
-        $class->extend(sprintf('\%s\%s', $classType->getExtends()->getNamespace(), $classType->getExtends()->getClass()));
+        if ($classType->hasExtends()) {
+            $class->extend($classType->getExtends()->getFqn());
+        }
         return $class;
     }
 }
