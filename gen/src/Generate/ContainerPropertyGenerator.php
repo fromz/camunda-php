@@ -9,6 +9,7 @@
 namespace Gen\Generate;
 
 
+use Gen\Entity\Container;
 use Gen\Entity\ContainerChild;
 use PhpParser\Builder\Property;
 use PhpParser\BuilderFactory;
@@ -16,24 +17,14 @@ use PhpParser\BuilderFactory;
 class ContainerPropertyGenerator
 {
 
-    /**
-     * @var Context
-     */
-    private $context;
-
-    public function __construct(Context $context)
-    {
-        $this->context = $context;
-    }
-
-    public function generateProperty(ContainerChild $child) : Property
+    public function generateProperty(Container $container, ContainerChild $child) : Property
     {
         $factory = new BuilderFactory;
         $classProperty = $factory
             ->property($child->getName())
             ->makePrivate();
         $containerProperty = $child->getProperty();
-        $db = $this->getDocblock($containerProperty);
+        $db = $this->getDocblock($container, $containerProperty);
         $classProperty->setDocComment($db->generateDocBlock());
         switch (get_class($containerProperty)) {
             case \Gen\Entity\ArrayProperty::class:
@@ -43,18 +34,18 @@ class ContainerPropertyGenerator
         return $classProperty;
     }
 
-    function getDocblock(\Gen\Entity\PropertyInterface $property) : \Gen\DocBlock
+    function getDocblock(Container $container, \Gen\Entity\PropertyInterface $property) : \Gen\DocBlock
     {
         $db = new \Gen\DocBlock();
         if (null !== $property->getDescription()) {
             $db->addComment($property->getDescription());
         }
-        $db->addComment(sprintf('@var %s', $this->getDocblockType($property)));
+        $db->addComment(sprintf('@var %s', $this->getDocblockType($container, $property)));
         return $db;
     }
 
 
-    function getDocblockType(\Gen\Entity\PropertyInterface $property)
+    function getDocblockType(Container $container, \Gen\Entity\PropertyInterface $property)
     {
         $nullable = '';
         if (true === $property->getNullable()) {
@@ -64,8 +55,8 @@ class ContainerPropertyGenerator
             case \Gen\Entity\Container::class:
                 return sprintf(
                     '\%s\%s',
-                    $this->context->getMap()[$property->getSchemaReference()]['namespace'],
-                    $this->context->getMap()[$property->getSchemaReference()]['class']
+                    $container->getNamespace(),
+                    $container->getClass()
                 );
             case \Gen\Entity\StringProperty::class:
                 return 'string' . $nullable;
@@ -77,7 +68,8 @@ class ContainerPropertyGenerator
                 return 'int' . $nullable;
                 break;
             case \Gen\Entity\ArrayProperty::class:
-                $childDockblockType = $this->getDocblockType($property->getChildType());
+                /* @var $property \Gen\Entity\ArrayProperty */
+                $childDockblockType = $this->getDocblockType($container, $property->getChildType());
                 return sprintf('%s[]', $childDockblockType);
                 break;
         }

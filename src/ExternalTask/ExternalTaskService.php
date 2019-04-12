@@ -90,5 +90,4 @@ class ExternalTaskService
             throw $clientException;
         }
     }
-
 }

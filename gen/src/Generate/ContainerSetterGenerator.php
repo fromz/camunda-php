@@ -18,16 +18,6 @@ use PhpParser\BuilderFactory;
 class ContainerSetterGenerator
 {
 
-    /**
-     * @var Context
-     */
-    private $context;
-
-    public function __construct(Context $context)
-    {
-        $this->context = $context;
-    }
-
     public function generateSetter(Container $container, ContainerChild $child) : Method
     {
         $factory = new BuilderFactory;
@@ -35,7 +25,7 @@ class ContainerSetterGenerator
         // Add a setter
         return $factory->method('set' . ucfirst($child->getName()))
             ->makePublic()
-            ->addParam($factory->param($child->getName())->setType($this->getVariableType($child->getProperty())))
+            ->addParam($factory->param($child->getName())->setType($this->getVariableType($container, $child->getProperty())))
             ->setDocComment($this->getDocblock($container, $child)->generateDocBlock())
             ->addStmt(
                 new Node\Stmt\Expression(new Node\Expr\Assign(new Node\Expr\Variable('this->' . $child->getName()), new Node\Expr\Variable($child->getName())))
@@ -48,16 +38,15 @@ class ContainerSetterGenerator
 
     }
 
-
-    private function getVariableType(\Gen\Entity\PropertyInterface $property)
+    private function getVariableType(Container $container, \Gen\Entity\PropertyInterface $property)
     {
         switch (get_class($property)) {
             case \Gen\Entity\Container::class:
                 /* @var $property \Gen\Entity\Container */
                 return sprintf(
                     '\%s\%s',
-                    $this->map[$property->getSchemaReference()]['namespace'],
-                    $this->map[$property->getSchemaReference()]['class']
+                    $container->getNamespace(),
+                    $container->getClass()
                 );
             case \Gen\Entity\StringProperty::class:
                 return 'string';
@@ -81,13 +70,13 @@ class ContainerSetterGenerator
         if (null !== $child->getProperty()->getDescription()) {
             $db->addComment($child->getProperty()->getDescription());
         }
-        $db->addComment(sprintf('@var %s $%s', $this->getDocblockType($child->getProperty()), $child->getName()));
+        $db->addComment(sprintf('@var %s $%s', $this->getDocblockType($container, $child->getProperty()), $child->getName()));
         $db->addComment(sprintf('@return %s', $container->getClass()));
         return $db;
     }
 
 
-    private function getDocblockType(\Gen\Entity\PropertyInterface $property)
+    private function getDocblockType(Container $container, \Gen\Entity\PropertyInterface $property)
     {
         $nullable = '';
         if (true === $property->getNullable()) {
@@ -97,8 +86,8 @@ class ContainerSetterGenerator
             case \Gen\Entity\Container::class:
                 return sprintf(
                     '\%s\%s',
-                    $this->context->getMap()[$property->getSchemaReference()]['namespace'],
-                    $this->context->getMap()[$property->getSchemaReference()]['class']
+                    $container->getNamespace(),
+                    $container->getClass()
                 );
             case \Gen\Entity\StringProperty::class:
                 return 'string' . $nullable;
@@ -110,7 +99,7 @@ class ContainerSetterGenerator
                 return 'int' . $nullable;
                 break;
             case \Gen\Entity\ArrayProperty::class:
-                $childDockblockType = $this->getDocblockType($property->getChildType());
+                $childDockblockType = $this->getDocblockType($container, $property->getChildType());
                 return sprintf('%s[]', $childDockblockType);
                 break;
         }

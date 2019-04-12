@@ -11,14 +11,11 @@ namespace Gen\Generate;
 
 use Gen\Entity\ArrayProperty;
 use Gen\Entity\Container;
+use PhpParser\Builder\Namespace_;
 use PhpParser\BuilderFactory;
 
 class ContainerGenerator
 {
-    /**
-     * @var Context
-     */
-    private $context;
 
     /**
      * @var ContainerPropertyGenerator
@@ -40,29 +37,25 @@ class ContainerGenerator
      */
     private $containerAdderGenerator;
 
-    public function __construct(Context $context)
+    public function __construct()
     {
-        $this->context = $context;
-        $this->containerPropertyGenerator = new ContainerPropertyGenerator($context);
-        $this->containerSetterGenerator = new ContainerSetterGenerator($context);
-        $this->containerGetterGenerator = new ContainerGetterGenerator($context);
-        $this->containerAdderGenerator = new ContainerAdderGenerator($context);
+        $this->containerPropertyGenerator = new ContainerPropertyGenerator();
+        $this->containerSetterGenerator = new ContainerSetterGenerator();
+        $this->containerGetterGenerator = new ContainerGetterGenerator();
+        $this->containerAdderGenerator = new ContainerAdderGenerator();
     }
 
-    public function generate($schemaName, Container $container)
+    public function generate(Container $container) : Namespace_
     {
         // Build the code
         $factory = new BuilderFactory;
-        $node = $factory->namespace($this->context->getMap()[$schemaName]['namespace']);
-        $class = $factory->class($this->context->getMap()[$schemaName]['class']);
-
-        $container->setNamespace($this->context->getMap()[$schemaName]['namespace']);
-        $container->setClass($this->context->getMap()[$schemaName]['class']);
+        $node = $factory->namespace($container->getNamespace());
+        $class = $factory->class($container->getClass());
 
         foreach ($container->getChildren() as $child) {
-            $class->addStmt($this->containerPropertyGenerator->generateProperty($child));
+            $class->addStmt($this->containerPropertyGenerator->generateProperty($container, $child));
             $class->addStmt($this->containerSetterGenerator->generateSetter($container, $child));
-            $class->addStmt($this->containerGetterGenerator->generateGetter($child));
+            $class->addStmt($this->containerGetterGenerator->generateGetter($container, $child));
             if ($child->getProperty() instanceof ArrayProperty) {
                 $class->addStmt($this->containerAdderGenerator->generateAdder($container, $child));
             }

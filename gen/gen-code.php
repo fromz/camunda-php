@@ -1,12 +1,12 @@
 <?php
 require_once "vendor/autoload.php";
 
-use PhpParser\PrettyPrinter;
-
 $spec = file_get_contents('swagger-fixed.json');
-$decodedSpec = json_decode($spec);
+$decodedSpec = \json_decode($spec);
 
 $document = new Swagger\Document($decodedSpec);
+
+$srcDir = '../src';
 
 $map = [
     '#/definitions/FetchExternalTasksDto' => [
@@ -19,32 +19,15 @@ $map = [
     ],
 ];
 
-$context = new \Gen\Generate\Context();
-$context->setMap($map);
-
-$srcDir = '../src';
-
+$containerWriter = new \Gen\ContainerWriter('../src');
 $schemaConverter = new \Gen\SchemaConverter($document);
-$genContainer = new \Gen\Generate\ContainerGenerator($context);
+$genContainer = new \Gen\Generate\ContainerGenerator();
 foreach ($map as $schema => $generatorDetails) {
     $container = $schemaConverter->convertReferenceToContainer($schema);
-    $node = $genContainer->generate($schema, $container);
-
-    // Write the contents to disk
-    $stmts = array($node->getNode());
-    $prettyPrinter = new PrettyPrinter\Standard();
-    $fileContents = $prettyPrinter->prettyPrintFile($stmts);
-    $destinationDir = sprintf(
-        '%s/%s',
-        $srcDir,
-        str_replace('\\', '/', removeFirstNamespacePart($generatorDetails['namespace']))
-    );
-    $destinationFile = $generatorDetails['class'];
-    $destinationFullFilepath = sprintf('%s/%s.php', $destinationDir, $destinationFile);
-    if (false === file_exists($destinationDir)) {
-        mkdir($destinationDir, 0777, true);
-    }
-    file_put_contents($destinationFullFilepath, $fileContents);
+    $container->setNamespace($generatorDetails['namespace']);
+    $container->setClass($generatorDetails['class']);
+    $node = $genContainer->generate($container);
+    $containerWriter->write($container, $node);
 }
 
 function removeFirstNamespacePart($namespace)

@@ -26,7 +26,7 @@ class FetchAndLockRequest
     /**
      * A JSON array of topic objects for which external tasks should be fetched. The returned tasks may be arbitrarily distributed among these topics. Each topic object has the following properties: Name Description topicName Mandatory. The topic's name. lockDuration Mandatory. The duration to lock the external tasks for in milliseconds. variables A JSON array of String values that represent variable names. For each result task belonging to this topic, the given variables are returned as well if they are accessible from the external task's execution. If not provided - all variables will be fetched. deserializeValues Determines whether serializable variable values (typically variables that store custom Java objects) should be deserialized on server side (default false).
      *
-     * @var \Camunda\ExternalTask\FetchExternalTaskTopic[]
+     * @var \Camunda\ExternalTask\FetchAndLockRequest[]
      */
     private $topics = array();
 
@@ -101,7 +101,7 @@ class FetchAndLockRequest
     /**
      * A JSON array of topic objects for which external tasks should be fetched. The returned tasks may be arbitrarily distributed among these topics. Each topic object has the following properties: Name Description topicName Mandatory. The topic's name. lockDuration Mandatory. The duration to lock the external tasks for in milliseconds. variables A JSON array of String values that represent variable names. For each result task belonging to this topic, the given variables are returned as well if they are accessible from the external task's execution. If not provided - all variables will be fetched. deserializeValues Determines whether serializable variable values (typically variables that store custom Java objects) should be deserialized on server side (default false).
      *
-     * @var \Camunda\ExternalTask\FetchExternalTaskTopic[]
+     * @var \Camunda\ExternalTask\FetchAndLockRequest[]
      *
      * @return FetchAndLockRequest
      */
@@ -115,7 +115,7 @@ class FetchAndLockRequest
     /**
      * A JSON array of topic objects for which external tasks should be fetched. The returned tasks may be arbitrarily distributed among these topics. Each topic object has the following properties: Name Description topicName Mandatory. The topic's name. lockDuration Mandatory. The duration to lock the external tasks for in milliseconds. variables A JSON array of String values that represent variable names. For each result task belonging to this topic, the given variables are returned as well if they are accessible from the external task's execution. If not provided - all variables will be fetched. deserializeValues Determines whether serializable variable values (typically variables that store custom Java objects) should be deserialized on server side (default false).
      *
-     * @return \Camunda\ExternalTask\FetchExternalTaskTopic[]
+     * @return \Camunda\ExternalTask\FetchAndLockRequest[]
      */
     public function getTopics()
     {
@@ -125,11 +125,11 @@ class FetchAndLockRequest
     /**
      * A JSON array of topic objects for which external tasks should be fetched. The returned tasks may be arbitrarily distributed among these topics. Each topic object has the following properties: Name Description topicName Mandatory. The topic's name. lockDuration Mandatory. The duration to lock the external tasks for in milliseconds. variables A JSON array of String values that represent variable names. For each result task belonging to this topic, the given variables are returned as well if they are accessible from the external task's execution. If not provided - all variables will be fetched. deserializeValues Determines whether serializable variable values (typically variables that store custom Java objects) should be deserialized on server side (default false).
      *
-     * @var \Camunda\ExternalTask\FetchExternalTaskTopic[]
+     * @var \Camunda\ExternalTask\FetchAndLockRequest[]
      *
      * @return FetchAndLockRequest
      */
-    public function addTopics(\Camunda\ExternalTask\FetchExternalTaskTopic $topics): self
+    public function addTopics(\Camunda\ExternalTask\FetchAndLockRequest $topics): self
     {
         $this->topics[] = $topics;
 
