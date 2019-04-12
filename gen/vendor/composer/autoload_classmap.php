@@ -550,7 +550,6 @@ return array(
     'Swagger\\Object\\AbstractObjectTest' => $vendorDir . '/thefrozenfire/swagger/tests/Swagger/Object/AbstractObjectTest.php',
     'Swagger\\Object\\CollectionObjectTraitTest' => $vendorDir . '/thefrozenfire/swagger/tests/Swagger/Object/CollectionObjectTraitTest.php',
     'Swagger\\Object\\ReferentialTraitTest' => $vendorDir . '/thefrozenfire/swagger/tests/Swagger/Object/ReferentialTraitTest.php',
-    'Swagger\\Object\\ValueObjectTraitTest' => $vendorDir . '/thefrozenfire/swagger/tests/Swagger/Object/ValueObjectTraitTest.php',
     'Swagger\\OperationReferenceTest' => $vendorDir . '/thefrozenfire/swagger/tests/Swagger/OperationReferenceTest.php',
     'Swagger\\SchemaResolverTest' => $vendorDir . '/thefrozenfire/swagger/tests/Swagger/SchemaResolverTest.php',
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',

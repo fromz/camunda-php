@@ -8,11 +8,10 @@
 
 namespace Gen;
 
-use Gen\Entity\Container;
 use PhpParser\PrettyPrinter;
 use PhpParser\Builder\Namespace_;
 
-class ContainerWriter
+class ClassTypeWriter
 {
 
     /**
@@ -32,7 +31,7 @@ class ContainerWriter
         return implode('\\', $parts);
     }
 
-    public function write(Container $container, Namespace_ $namespace)
+    public function write(ClassTypeInterface $classType, Namespace_ $namespace) : string
     {
         // Write the contents to disk
         $stmts = array($namespace->getNode());
@@ -41,12 +40,13 @@ class ContainerWriter
         $destinationDir = sprintf(
             '%s/%s',
             $this->src,
-            str_replace('\\', '/', removeFirstNamespacePart($container->getNamespace()))
+            str_replace('\\', '/', $this->removeFirstNamespacePart($classType->getNamespace()))
         );
-        $destinationFullFilepath = sprintf('%s/%s.php', $destinationDir, $container->getClass());
+        $destinationFullFilepath = sprintf('%s/%s.php', $destinationDir, $classType->getClass());
         if (false === file_exists($destinationDir)) {
             mkdir($destinationDir, 0777, true);
         }
         file_put_contents($destinationFullFilepath, $fileContents);
+        return $destinationFullFilepath;
     }
 }

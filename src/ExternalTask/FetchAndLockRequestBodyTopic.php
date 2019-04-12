@@ -2,7 +2,7 @@
 
 namespace Camunda\ExternalTask;
 
-class FetchExternalTaskTopic
+class FetchAndLockRequestBodyTopic
 {
     /**
      * @var string
@@ -27,7 +27,7 @@ class FetchExternalTaskTopic
     /**
      * @var string
      *
-     * @return FetchExternalTaskTopic
+     * @return FetchAndLockRequestBodyTopic
      */
     public function setTopicName(string $topicName): self
     {
@@ -47,7 +47,7 @@ class FetchExternalTaskTopic
     /**
      * @var int
      *
-     * @return FetchExternalTaskTopic
+     * @return FetchAndLockRequestBodyTopic
      */
     public function setLockDuration(int $lockDuration): self
     {
@@ -67,7 +67,7 @@ class FetchExternalTaskTopic
     /**
      * @var string[]
      *
-     * @return FetchExternalTaskTopic
+     * @return FetchAndLockRequestBodyTopic
      */
     public function setVariables(array $variables): self
     {
@@ -87,7 +87,7 @@ class FetchExternalTaskTopic
     /**
      * @var string[]
      *
-     * @return FetchExternalTaskTopic
+     * @return FetchAndLockRequestBodyTopic
      */
     public function addVariables(string $variables): self
     {
@@ -99,7 +99,7 @@ class FetchExternalTaskTopic
     /**
      * @var bool
      *
-     * @return FetchExternalTaskTopic
+     * @return FetchAndLockRequestBodyTopic
      */
     public function setDeserializeValues(bool $deserializeValues): self
     {

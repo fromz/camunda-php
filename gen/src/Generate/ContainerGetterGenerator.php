@@ -11,6 +11,8 @@ namespace Gen\Generate;
 
 use Gen\Entity\Container;
 use Gen\Entity\ContainerChild;
+use Gen\Service\QueryParameters;
+use Gen\Service\RequestParameters;
 use PhpParser\Builder\Method;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
@@ -29,9 +31,9 @@ class ContainerGetterGenerator
             );
     }
 
-    function getDocblock(Container $container, \Gen\Entity\PropertyInterface $property) : \Gen\DocBlock
+    function getDocblock(Container $container, \Gen\Entity\PropertyInterface $property) : DocBlock
     {
-        $db = new \Gen\DocBlock();
+        $db = new DocBlock();
         if (null !== $property->getDescription()) {
             $db->addComment($property->getDescription());
         }
@@ -47,7 +49,9 @@ class ContainerGetterGenerator
             $nullable = '|null';
         }
         switch (get_class($property)) {
-            case \Gen\Entity\Container::class:
+            case QueryParameters::class:
+            case RequestParameters::class:
+            case Container::class:
                 return sprintf(
                     '\%s\%s',
                     $container->getNamespace(),

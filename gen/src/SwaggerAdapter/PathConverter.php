@@ -6,10 +6,12 @@
  * Time: 11:27 AM
  */
 
-namespace Gen;
+namespace Gen\SwaggerAdapter;
 
+use Gen\Entity;
+use Exception;
 
-class SchemaConverter
+class PathConverter
 {
     /**
      * @var \Swagger\Document
@@ -21,27 +23,24 @@ class SchemaConverter
         $this->document = $document;
     }
 
-    public function convertReferenceToContainer(string $schema) : Entity\Container
+    public function applySchemaPropertiesToContainer(string $schemaReference, Entity\Container $container)
     {
-        $schemaReference = $schema;
-        $schema = str_replace('#/definitions/', '', $schema);
-        $s = $this->document->getSchemaResolver()->findSchemaForType($schema);
-        /* @var $s \Swagger\Object\Schema */
-        switch ($s->getType()) {
+        $d = $this->document->getDefinitions();
+        /* @var $d \Swagger\Object\Definitions */
+        $schema = $d->getDefinition(str_replace('#/definitions/', '', $schemaReference));
+        /* @var $schema \Swagger\Object\Schema */
+        switch ($schema->getType()) {
             case 'object':
-                $container = new Entity\Container();
-                $container->setSchemaReference($schemaReference);
                 // append children to container
-                foreach ($s->getProperties()->getDocument() as $name => $schemaProperty) {
+                foreach ($schema->getProperties()->getDocument() as $name => $schemaProperty) {
                     /* @var $schemaProperty \stdClass */
                     $entityProperty = $this->schemaPropertyToEntityProperty($schemaProperty);
                     $container->addChild($name, $entityProperty);
                 }
                 break;
             default:
-                throw new Exception(sprintf('Unsure how to support Schema type %s', $s->getType()));
+                throw new Exception(sprintf('Unsure how to support Schema type %s', $schema->getType()));
         }
-        return $container;
     }
 
     private function schemaPropertyToEntityProperty(\stdClass $schemaProperty)

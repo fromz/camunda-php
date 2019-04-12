@@ -1,38 +1,40 @@
 <?php
+
+use Gen\Entity\Container;
+
 require_once "vendor/autoload.php";
 
 $spec = file_get_contents('swagger-fixed.json');
 $decodedSpec = \json_decode($spec);
 
+// Service:
+//  has operations (GET /external-task)
+//      may or may not have query parameters (QueryParameters-extends Container)
+//      may or may not have body parameters (RequestParameters-extends Container)
+//      has whitelist status codes
+//      all other status codes generate exceptions
+
 $document = new Swagger\Document($decodedSpec);
+$mapper = new \Gen\SwaggerAdapter\SwaggerMapper($document);
+$endpoint = $mapper->pathToEndpoint('/external-task', 'get',
+    (new \Gen\SwaggerAdapter\EndpointConfig())
+        ->setQueryParamsAs((new \Gen\Service\QueryParameters())->setNamespace('Camunda\ExternalTask')->setClass('GetExternalTaskQueryParams'))
+);
+$endpoint->write();
 
-$srcDir = '../src';
 
-$map = [
-    '#/definitions/FetchExternalTasksDto' => [
-        'namespace' => 'Camunda\ExternalTask',
-        'class' => 'FetchAndLockRequest',
-    ],
-    '#/definitions/FetchExternalTaskTopicDto' => [
-        'namespace' => 'Camunda\ExternalTask',
-        'class' => 'FetchExternalTaskTopic',
-    ],
-];
+$endpoint = $mapper->pathToEndpoint('/external-task/fetchAndLock', 'post',
+    (new \Gen\SwaggerAdapter\EndpointConfig())
+        ->setRequestParametersAs(
+            (new \Gen\Service\RequestParameters())->setNamespace('Camunda\ExternalTask')->setClass('FetchAndLockRequestBody'),
+            [
+                new \Gen\SwaggerAdapter\SchemaReference(
+                    '#/definitions/FetchExternalTaskTopicDto',
+                    (new \Gen\Service\RequestParameters())->setNamespace('Camunda\ExternalTask')->setClass('FetchAndLockRequestBodyTopic')
+                ),
+            ]
+        )
+);
+$endpoint->write();
 
-$containerWriter = new \Gen\ContainerWriter('../src');
-$schemaConverter = new \Gen\SchemaConverter($document);
-$genContainer = new \Gen\Generate\ContainerGenerator();
-foreach ($map as $schema => $generatorDetails) {
-    $container = $schemaConverter->convertReferenceToContainer($schema);
-    $container->setNamespace($generatorDetails['namespace']);
-    $container->setClass($generatorDetails['class']);
-    $node = $genContainer->generate($container);
-    $containerWriter->write($container, $node);
-}
-
-function removeFirstNamespacePart($namespace)
-{
-    $parts = explode('\\', $namespace);
-    array_shift($parts);
-    return implode('\\', $parts);
-}
+// Fetch endpoint request parameters

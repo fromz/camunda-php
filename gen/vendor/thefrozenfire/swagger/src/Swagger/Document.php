@@ -6,8 +6,6 @@ use Swagger\Exception as SwaggerException;
 
 class Document extends SwaggerObject\AbstractObject
 {
-    protected $defaultScheme;
-
     protected $operationsById = [];
     
     protected $schemaResolver;
@@ -87,48 +85,13 @@ class Document extends SwaggerObject\AbstractObject
         $statusCode
     )
     {
-        $operation = $this->getOperationById($operationId);
-        try {
-            $response = $operation->getOperation()
-                ->getResponses()
-                ->getHttpStatusCode($statusCode);
-        } catch(SwaggerException\MissingDocumentPropertyException $e) {
-            // This status is not defined, but we can hope for an operation default
-            try {
-                $response = $operation->getOperation()
-                    ->getResponses()
-                    ->getDefault();
-            } catch(SwaggerException\MissingDocumentPropertyException $e) {
-                throw (new SwaggerException\UndefinedOperationResponseSchemaException)
-                    ->setOperationId($operationId)
-                    ->setStatusCode($statusCode);
-            }
-        }
+        $operation = $this->getOperationById($operationId)
+            ->getOperation();
         
         $schema = $this->getSchemaResolver()
-            ->resolveReference($response->getSchema());
-        
-        return $schema;
-    }
-    
-    public function getDefaultScheme()
-    {
-        if(!$this->defaultScheme) {
-            $schemes = $this->getSchemes();
-            $defaultScheme = reset($schemes);
+            ->findSchemaForOperationResponse($operation, $statusCode);
             
-            if($defaultScheme) {
-                $this->defaultScheme = $defaultScheme;
-            }
-        }
-    
-        return $this->defaultScheme;
-    }
-    
-    public function setDefaultScheme($defaultScheme)
-    {
-        $this->defaultScheme = $defaultScheme;
-        return $this;
+        return $schema;
     }
     
     public function getSchemaResolver()

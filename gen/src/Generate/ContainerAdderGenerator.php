@@ -11,9 +11,13 @@ namespace Gen\Generate;
 
 use Gen\Entity\Container;
 use Gen\Entity\ContainerChild;
+use Gen\Exception;
+use Gen\Service\QueryParameters;
+use Gen\Service\RequestParameters;
 use PhpParser\Builder\Method;
 use PhpParser\Node;
 use PhpParser\BuilderFactory;
+use Swagger\Object\Parameter\Query;
 
 class ContainerAdderGenerator
 {
@@ -41,8 +45,9 @@ class ContainerAdderGenerator
     private function getVariableType(Container $container, \Gen\Entity\PropertyInterface $property)
     {
         switch (get_class($property)) {
-            case \Gen\Entity\Container::class:
-                /* @var $property \Gen\Entity\Container */
+            case QueryParameters::class:
+            case RequestParameters::class:
+            case Container::class:
                 return sprintf(
                     '\%s\%s',
                     $container->getNamespace(),
@@ -64,9 +69,9 @@ class ContainerAdderGenerator
         return 'Unknown type';
     }
 
-    private function getDocblock(Container $container, ContainerChild $child) : \Gen\DocBlock
+    private function getDocblock(Container $container, ContainerChild $child) : DocBlock
     {
-        $db = new \Gen\DocBlock();
+        $db = new DocBlock();
         if (null !== $child->getProperty()->getDescription()) {
             $db->addComment($child->getProperty()->getDescription());
         }
@@ -79,7 +84,9 @@ class ContainerAdderGenerator
     private function getDocblockType(Container $container, \Gen\Entity\PropertyInterface $property)
     {
         switch (get_class($property)) {
-            case \Gen\Entity\Container::class:
+            case QueryParameters::class:
+            case RequestParameters::class:
+            case Container::class:
                 return sprintf(
                     '\%s\%s',
                     $container->getNamespace(),
@@ -99,6 +106,8 @@ class ContainerAdderGenerator
                 $childDockblockType = $this->getDocblockType($container, $property->getChildType());
                 return sprintf('%s[]', $childDockblockType);
                 break;
+            default:
+                throw new Exception(sprintf('Unknown type %s', get_class($property)));
         }
         return 'Unknown type';
     }

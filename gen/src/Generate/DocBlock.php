@@ -6,7 +6,7 @@
  * Time: 12:05 PM
  */
 
-namespace Gen;
+namespace Gen\Generate;
 
 
 class DocBlock

@@ -4,7 +4,7 @@
     "type": "library",
     "license": "Apache 2",
     "require": {
-        "thefrozenfire/swagger": "^2.0",
+        "thefrozenfire/swagger": "^2.0@dev",
         "nikic/php-parser": "^4.2"
     },
     "config": {

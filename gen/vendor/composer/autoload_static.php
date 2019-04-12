@@ -634,7 +634,6 @@ class ComposerStaticInitab8eaa1c152d9e1c67c1faa99b098926
         'Swagger\\Object\\AbstractObjectTest' => __DIR__ . '/..' . '/thefrozenfire/swagger/tests/Swagger/Object/AbstractObjectTest.php',
         'Swagger\\Object\\CollectionObjectTraitTest' => __DIR__ . '/..' . '/thefrozenfire/swagger/tests/Swagger/Object/CollectionObjectTraitTest.php',
         'Swagger\\Object\\ReferentialTraitTest' => __DIR__ . '/..' . '/thefrozenfire/swagger/tests/Swagger/Object/ReferentialTraitTest.php',
-        'Swagger\\Object\\ValueObjectTraitTest' => __DIR__ . '/..' . '/thefrozenfire/swagger/tests/Swagger/Object/ValueObjectTraitTest.php',
         'Swagger\\OperationReferenceTest' => __DIR__ . '/..' . '/thefrozenfire/swagger/tests/Swagger/OperationReferenceTest.php',
         'Swagger\\SchemaResolverTest' => __DIR__ . '/..' . '/thefrozenfire/swagger/tests/Swagger/SchemaResolverTest.php',
         'Text_Template' => __DIR__ . '/..' . '/phpunit/php-text-template/src/Template.php',
