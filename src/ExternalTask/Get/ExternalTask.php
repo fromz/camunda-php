@@ -2,7 +2,7 @@
 
 namespace Camunda\ExternalTask\Get;
 
-class ExternalTask
+class ExternalTask implements \JsonSerializable
 {
     /**
      * The id of the activity that this external task belongs to.
@@ -486,5 +486,60 @@ class ExternalTask
     public function getPriority()
     {
         return $this->priority;
+    }
+
+    public function jsonSerialize()
+    {
+        $json = array();
+        if (null !== $this->activityId) {
+            $json['activityId'] = $this->activityId;
+        }
+        if (null !== $this->activityInstanceId) {
+            $json['activityInstanceId'] = $this->activityInstanceId;
+        }
+        if (null !== $this->errorMessage) {
+            $json['errorMessage'] = $this->errorMessage;
+        }
+        if (null !== $this->errorDetails) {
+            $json['errorDetails'] = $this->errorDetails;
+        }
+        if (null !== $this->executionId) {
+            $json['executionId'] = $this->executionId;
+        }
+        if (null !== $this->id) {
+            $json['id'] = $this->id;
+        }
+        if (null !== $this->lockExpirationTime) {
+            $json['lockExpirationTime'] = $this->lockExpirationTime;
+        }
+        if (null !== $this->processDefinitionId) {
+            $json['processDefinitionId'] = $this->processDefinitionId;
+        }
+        if (null !== $this->processDefinitionKey) {
+            $json['processDefinitionKey'] = $this->processDefinitionKey;
+        }
+        if (null !== $this->processInstanceId) {
+            $json['processInstanceId'] = $this->processInstanceId;
+        }
+        if (null !== $this->retries) {
+            $json['retries'] = $this->retries;
+        }
+        if (null !== $this->suspended) {
+            $json['suspended'] = $this->suspended;
+        }
+        if (null !== $this->workerId) {
+            $json['workerId'] = $this->workerId;
+        }
+        if (null !== $this->topicName) {
+            $json['topicName'] = $this->topicName;
+        }
+        if (null !== $this->tenantId) {
+            $json['tenantId'] = $this->tenantId;
+        }
+        if (null !== $this->priority) {
+            $json['priority'] = $this->priority;
+        }
+
+        return $json;
     }
 }

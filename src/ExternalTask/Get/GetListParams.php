@@ -2,7 +2,7 @@
 
 namespace Camunda\ExternalTask\Get;
 
-class GetListParams
+class GetListParams implements \JsonSerializable
 {
     /**
      * @var int
@@ -577,5 +577,81 @@ class GetListParams
     public function getActivityIdIn()
     {
         return $this->activityIdIn;
+    }
+
+    public function jsonSerialize()
+    {
+        $json = array();
+        if (null !== $this->firstResult) {
+            $json['firstResult'] = $this->firstResult;
+        }
+        if (null !== $this->maxResults) {
+            $json['maxResults'] = $this->maxResults;
+        }
+        if (null !== $this->processInstanceId) {
+            $json['processInstanceId'] = $this->processInstanceId;
+        }
+        if (null !== $this->processDefinitionId) {
+            $json['processDefinitionId'] = $this->processDefinitionId;
+        }
+        if (null !== $this->workerId) {
+            $json['workerId'] = $this->workerId;
+        }
+        if (null !== $this->withRetriesLeft) {
+            $json['withRetriesLeft'] = $this->withRetriesLeft;
+        }
+        if (null !== $this->notLocked) {
+            $json['notLocked'] = $this->notLocked;
+        }
+        if (null !== $this->lockExpirationAfter) {
+            $json['lockExpirationAfter'] = $this->lockExpirationAfter;
+        }
+        if (null !== $this->active) {
+            $json['active'] = $this->active;
+        }
+        if (null !== $this->suspended) {
+            $json['suspended'] = $this->suspended;
+        }
+        if (null !== $this->activityId) {
+            $json['activityId'] = $this->activityId;
+        }
+        if (null !== $this->executionId) {
+            $json['executionId'] = $this->executionId;
+        }
+        if (null !== $this->priorityLowerThanOrEquals) {
+            $json['priorityLowerThanOrEquals'] = $this->priorityLowerThanOrEquals;
+        }
+        if (null !== $this->priorityHigherThanOrEquals) {
+            $json['priorityHigherThanOrEquals'] = $this->priorityHigherThanOrEquals;
+        }
+        if (null !== $this->lockExpirationBefore) {
+            $json['lockExpirationBefore'] = $this->lockExpirationBefore;
+        }
+        if (null !== $this->tenantIdIn) {
+            $json['tenantIdIn'] = $this->tenantIdIn;
+        }
+        if (null !== $this->sortOrder) {
+            $json['sortOrder'] = $this->sortOrder;
+        }
+        if (null !== $this->topicName) {
+            $json['topicName'] = $this->topicName;
+        }
+        if (null !== $this->sortBy) {
+            $json['sortBy'] = $this->sortBy;
+        }
+        if (null !== $this->noRetriesLeft) {
+            $json['noRetriesLeft'] = $this->noRetriesLeft;
+        }
+        if (null !== $this->externalTaskId) {
+            $json['externalTaskId'] = $this->externalTaskId;
+        }
+        if (null !== $this->locked) {
+            $json['locked'] = $this->locked;
+        }
+        if (null !== $this->activityIdIn) {
+            $json['activityIdIn'] = $this->activityIdIn;
+        }
+
+        return $json;
     }
 }
