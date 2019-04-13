@@ -29,4 +29,9 @@ class ArrayProperty extends AbstractProperty
     {
         return $this->childType;
     }
+
+    public function getPhpPropertyType(): string
+    {
+        return 'array';
+    }
 }

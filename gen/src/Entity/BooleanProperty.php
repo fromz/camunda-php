@@ -11,5 +11,8 @@ namespace Gen\Entity;
 
 class BooleanProperty extends AbstractProperty
 {
-
+    public function getPhpPropertyType(): string
+    {
+        return 'bool';
+    }
 }

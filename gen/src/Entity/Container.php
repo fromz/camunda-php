@@ -16,6 +16,11 @@ class Container extends AbstractProperty implements PropertyInterface, ClassType
 
     use ClassTypeTrait;
 
+    public function getPhpPropertyType(): string
+    {
+        return $this->getFqn();
+    }
+
     /**
      * @var ContainerChild[]
      */

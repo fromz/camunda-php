@@ -1,8 +1,8 @@
 <?php
 
-namespace \Camunda\ExternalTask;
+namespace Camunda\ExternalTask\Get;
 
-class GetExternalTaskResponse
+class ExternalTask
 {
     /**
      * The id of the activity that this external task belongs to.
@@ -117,7 +117,7 @@ class GetExternalTaskResponse
      *
      * @var string
      *
-     * @return GetExternalTaskResponse
+     * @return ExternalTask
      */
     public function setActivityId(string $activityId): self
     {
@@ -141,7 +141,7 @@ class GetExternalTaskResponse
      *
      * @var string
      *
-     * @return GetExternalTaskResponse
+     * @return ExternalTask
      */
     public function setActivityInstanceId(string $activityInstanceId): self
     {
@@ -165,7 +165,7 @@ class GetExternalTaskResponse
      *
      * @var string
      *
-     * @return GetExternalTaskResponse
+     * @return ExternalTask
      */
     public function setErrorMessage(string $errorMessage): self
     {
@@ -187,7 +187,7 @@ class GetExternalTaskResponse
     /**
      * @var string
      *
-     * @return GetExternalTaskResponse
+     * @return ExternalTask
      */
     public function setErrorDetails(string $errorDetails): self
     {
@@ -209,7 +209,7 @@ class GetExternalTaskResponse
      *
      * @var string
      *
-     * @return GetExternalTaskResponse
+     * @return ExternalTask
      */
     public function setExecutionId(string $executionId): self
     {
@@ -233,7 +233,7 @@ class GetExternalTaskResponse
      *
      * @var string
      *
-     * @return GetExternalTaskResponse
+     * @return ExternalTask
      */
     public function setId(string $id): self
     {
@@ -257,7 +257,7 @@ class GetExternalTaskResponse
      *
      * @var string
      *
-     * @return GetExternalTaskResponse
+     * @return ExternalTask
      */
     public function setLockExpirationTime(string $lockExpirationTime): self
     {
@@ -281,7 +281,7 @@ class GetExternalTaskResponse
      *
      * @var string
      *
-     * @return GetExternalTaskResponse
+     * @return ExternalTask
      */
     public function setProcessDefinitionId(string $processDefinitionId): self
     {
@@ -305,7 +305,7 @@ class GetExternalTaskResponse
      *
      * @var string
      *
-     * @return GetExternalTaskResponse
+     * @return ExternalTask
      */
     public function setProcessDefinitionKey(string $processDefinitionKey): self
     {
@@ -329,7 +329,7 @@ class GetExternalTaskResponse
      *
      * @var string
      *
-     * @return GetExternalTaskResponse
+     * @return ExternalTask
      */
     public function setProcessInstanceId(string $processInstanceId): self
     {
@@ -353,7 +353,7 @@ class GetExternalTaskResponse
      *
      * @var int
      *
-     * @return GetExternalTaskResponse
+     * @return ExternalTask
      */
     public function setRetries(int $retries): self
     {
@@ -375,7 +375,7 @@ class GetExternalTaskResponse
     /**
      * @var bool
      *
-     * @return GetExternalTaskResponse
+     * @return ExternalTask
      */
     public function setSuspended(bool $suspended): self
     {
@@ -397,7 +397,7 @@ class GetExternalTaskResponse
      *
      * @var string
      *
-     * @return GetExternalTaskResponse
+     * @return ExternalTask
      */
     public function setWorkerId(string $workerId): self
     {
@@ -421,7 +421,7 @@ class GetExternalTaskResponse
      *
      * @var string
      *
-     * @return GetExternalTaskResponse
+     * @return ExternalTask
      */
     public function setTopicName(string $topicName): self
     {
@@ -445,7 +445,7 @@ class GetExternalTaskResponse
      *
      * @var string
      *
-     * @return GetExternalTaskResponse
+     * @return ExternalTask
      */
     public function setTenantId(string $tenantId): self
     {
@@ -469,7 +469,7 @@ class GetExternalTaskResponse
      *
      * @var int
      *
-     * @return GetExternalTaskResponse
+     * @return ExternalTask
      */
     public function setPriority(int $priority): self
     {

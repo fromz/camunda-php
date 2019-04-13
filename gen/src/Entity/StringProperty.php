@@ -11,5 +11,8 @@ namespace Gen\Entity;
 
 class StringProperty extends AbstractProperty
 {
-
+    public function getPhpPropertyType(): string
+    {
+        return 'string';
+    }
 }

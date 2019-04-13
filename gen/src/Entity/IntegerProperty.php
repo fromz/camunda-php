@@ -11,5 +11,8 @@ namespace Gen\Entity;
 
 class IntegerProperty extends AbstractProperty
 {
-
+    public function getPhpPropertyType(): string
+    {
+        return 'int';
+    }
 }

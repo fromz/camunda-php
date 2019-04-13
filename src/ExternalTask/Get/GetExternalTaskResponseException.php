@@ -1,6 +1,6 @@
 <?php
 
-namespace \Camunda\ExternalTask;
+namespace Camunda\ExternalTask\Get;
 
 class GetExternalTaskResponseException extends \Exception
 {

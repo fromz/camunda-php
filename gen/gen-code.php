@@ -25,19 +25,26 @@ $decodedSpec = \json_decode($spec);
 $document = new Swagger\Document($decodedSpec);
 $mapper = new \Gen\SwaggerAdapter\SwaggerMapper($document);
 
+
 // Service is made up of many endpoints
 // Endpoint: (e.g. GET /external-task)
 //  may or may not have query parameters (QueryParameters-extends Container)
 //  may or may not have body parameters (RequestParameters-extends Container)
 //  maps response codes to ResponseType (Exception,ResponseContent)
-$endpoint = $mapper->pathToEndpoint('/external-task', 'get',
-    (new \Gen\SwaggerAdapter\EndpointConfig())
-        ->setQueryParamsAs((new \Gen\Service\QueryParameters())->setNamespace('\Camunda\ExternalTask')->setClass('GetExternalTaskQueryParams'))
-        ->addResponseCodeAs(200, (new \Gen\Service\ResponseContent())->setNamespace('\Camunda\ExternalTask')->setClass('GetExternalTaskResponse'))
-        ->addResponseCodeAs(400, (new \Gen\Service\ResponseException())->setNamespace('\Camunda\ExternalTask')->setClass('GetExternalTaskResponseException'))
-);
-$endpoint->write();
-
+(new \Gen\Service\Service())
+    ->setNamespace('\Camunda\ExternalTask\Get')
+    ->setClass('GetService')
+    ->addEndpointDefinition('getList', $mapper->pathToEndpoint('/external-task', 'get',
+        (new \Gen\SwaggerAdapter\EndpointConfig())
+            ->setQueryParamsAs((new \Gen\Service\QueryParameters())->setNamespace('\Camunda\ExternalTask\Get')->setClass('GetListParams'))
+            ->addResponseCodeAs(200, (new \Gen\Service\ResponseContent())->setNamespace('\Camunda\ExternalTask\Get')->setClass('ExternalTask'))
+            ->addResponseCodeAs(400, (new \Gen\Service\ResponseException())->setNamespace('\Camunda\ExternalTask\Get')->setClass('GetExternalTaskResponseException'))
+    ))
+    ->addEndpointDefinition('getById', $mapper->pathToEndpoint('/external-task/{id}', 'get',
+        (new \Gen\SwaggerAdapter\EndpointConfig())
+    ))
+    ->write()
+;
 
 //$endpoint = $mapper->pathToEndpoint('/external-task/fetchAndLock', 'post',
 //    (new \Gen\SwaggerAdapter\EndpointConfig())

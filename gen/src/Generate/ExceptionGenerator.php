@@ -20,7 +20,7 @@ class ExceptionGenerator
         $classGenerator = new ClassGenerator();
         // Build the code
         $factory = new BuilderFactory;
-        $namespace = $factory->namespace($responseException->getNamespace());
+        $namespace = $factory->namespace($responseException->getNamespaceWithoutLeadingSlash());
         $class = $classGenerator->generate($responseException);
         $namespace->addStmt($class);
         return $namespace;

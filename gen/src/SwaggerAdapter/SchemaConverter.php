@@ -62,7 +62,12 @@ class SchemaConverter
         }
     }
 
-    private function schemaPropertyToEntityProperty(\stdClass $schemaProperty)
+    public function parameterToProperty(\Swagger\Object\Parameter $parameter) : Entity\PropertyInterface
+    {
+        return $this->schemaPropertyToEntityProperty($parameter->getDocument());
+    }
+
+    public function schemaPropertyToEntityProperty(\stdClass $schemaProperty)
     {
         switch ($schemaProperty->type) {
             case 'integer':

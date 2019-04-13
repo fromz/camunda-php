@@ -34,6 +34,11 @@ trait ClassTypeTrait
         return $this->namespace;
     }
 
+    public function getNamespaceWithoutLeadingSlash() : string
+    {
+        return ltrim($this->getNamespace(), '\\');
+    }
+
     /**
      * @param string $namespace
      * @return self

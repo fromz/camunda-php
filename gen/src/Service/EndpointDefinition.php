@@ -12,7 +12,7 @@ namespace Gen\Service;
 use Gen\Entity\Container;
 use Gen\Entity\PropertyInterface;
 use Gen\Generate\ExceptionGenerator;
-use Gen\SwaggerAdapter\EndpointConfig;
+use PharIo\Manifest\Url;
 
 class EndpointDefinition
 {
@@ -29,7 +29,7 @@ class EndpointDefinition
     /**
      * @var PropertyInterface[]
      */
-    private $pathParameters;
+    private $pathParameters = [];
 
     /**
      * @var string
@@ -54,6 +54,28 @@ class EndpointDefinition
     public function addResponse(int $responseCode, ResponseInterface $response)
     {
         $this->responses[$responseCode] = $response;
+    }
+
+    /**
+     * @return ResponseInterface[]
+     */
+    public function getResponses() : array
+    {
+        return $this->responses;
+    }
+
+    /**
+     * @return PropertyInterface[]
+     */
+    public function getPathParameters(): array
+    {
+        return $this->pathParameters;
+    }
+
+    public function addPathParameter(string $name, PropertyInterface $parameter) : EndpointDefinition
+    {
+        $this->pathParameters[$name] = $parameter;
+        return $this;
     }
 
     /**
@@ -100,6 +122,11 @@ class EndpointDefinition
         return $this->queryParameters;
     }
 
+    public function hasQueryParameters() : bool
+    {
+        return $this->queryParameters !== null;
+    }
+
     /**
      * @param QueryParameters $queryParameters
      * @return EndpointDefinition
@@ -118,38 +145,17 @@ class EndpointDefinition
         return $this->requestParameters;
     }
 
+    public function hasRequestParameters() : bool
+    {
+        return $this->requestParameters !== null;
+    }
+
     /**
      * @param RequestParameters $requestParameters
      */
     public function setRequestParameters(RequestParameters $requestParameters): void
     {
         $this->requestParameters = $requestParameters;
-    }
-
-    /**
-     * @return PropertyInterface[]
-     */
-    public function getPathParameters(): array
-    {
-        return $this->pathParameters;
-    }
-
-    /**
-     * @param PropertyInterface[] $pathParameters
-     * @return EndpointDefinition
-     */
-    public function setPathParameters(array $pathParameters): EndpointDefinition
-    {
-        $this->pathParameters = $pathParameters;
-        return $this;
-    }
-
-    /**
-     * @param PropertyInterface $pathParameter
-     */
-    public function addPathParameter(PropertyInterface $pathParameter)
-    {
-        $this->pathParameters[] = $pathParameter;
     }
 
     public function write()

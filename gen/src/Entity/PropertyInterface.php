@@ -18,4 +18,6 @@ interface PropertyInterface
     public function setDescription(?string $description);
 
     public function getDescription() : ?string;
+
+    public function getPhpPropertyType() : string;
 }

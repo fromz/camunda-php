@@ -52,7 +52,7 @@ class ContainerGenerator
     {
         // Build the code
         $factory = new BuilderFactory;
-        $namespace = $factory->namespace($container->getNamespace());
+        $namespace = $factory->namespace($container->getNamespaceWithoutLeadingSlash());
         $this->classGenerator->generate($container);
         $class = $factory->class($container->getClass());
 

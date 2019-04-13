@@ -1,8 +1,8 @@
 <?php
 
-namespace Camunda\ExternalTask;
+namespace Camunda\ExternalTask\Get;
 
-class GetExternalTaskQueryParams
+class GetListParams
 {
     /**
      * @var int
@@ -122,7 +122,7 @@ class GetExternalTaskQueryParams
     /**
      * @var int
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setFirstResult(int $firstResult): self
     {
@@ -142,7 +142,7 @@ class GetExternalTaskQueryParams
     /**
      * @var int
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setMaxResults(int $maxResults): self
     {
@@ -162,7 +162,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setProcessInstanceId(string $processInstanceId): self
     {
@@ -182,7 +182,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setProcessDefinitionId(string $processDefinitionId): self
     {
@@ -202,7 +202,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setWorkerId(string $workerId): self
     {
@@ -222,7 +222,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setWithRetriesLeft(string $withRetriesLeft): self
     {
@@ -242,7 +242,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setNotLocked(string $notLocked): self
     {
@@ -262,7 +262,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setLockExpirationAfter(string $lockExpirationAfter): self
     {
@@ -282,7 +282,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setActive(string $active): self
     {
@@ -302,7 +302,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setSuspended(string $suspended): self
     {
@@ -322,7 +322,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setActivityId(string $activityId): self
     {
@@ -342,7 +342,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setExecutionId(string $executionId): self
     {
@@ -362,7 +362,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setPriorityLowerThanOrEquals(string $priorityLowerThanOrEquals): self
     {
@@ -382,7 +382,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setPriorityHigherThanOrEquals(string $priorityHigherThanOrEquals): self
     {
@@ -402,7 +402,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setLockExpirationBefore(string $lockExpirationBefore): self
     {
@@ -422,7 +422,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setTenantIdIn(string $tenantIdIn): self
     {
@@ -442,7 +442,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setSortOrder(string $sortOrder): self
     {
@@ -462,7 +462,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setTopicName(string $topicName): self
     {
@@ -482,7 +482,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setSortBy(string $sortBy): self
     {
@@ -502,7 +502,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setNoRetriesLeft(string $noRetriesLeft): self
     {
@@ -522,7 +522,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setExternalTaskId(string $externalTaskId): self
     {
@@ -542,7 +542,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setLocked(string $locked): self
     {
@@ -562,7 +562,7 @@ class GetExternalTaskQueryParams
     /**
      * @var string
      *
-     * @return GetExternalTaskQueryParams
+     * @return GetListParams
      */
     public function setActivityIdIn(string $activityIdIn): self
     {

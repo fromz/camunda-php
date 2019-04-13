@@ -38,6 +38,17 @@ class SwaggerMapper
             ));
         }
 
+        // Add URL Parameters
+        foreach ($op->getParameters() as $param) {
+            /* @var $param \Swagger\Object\Parameter */
+            if ('path' !== $param->getIn()) {
+                continue;
+            }
+            $schemaConverter = new \Gen\SwaggerAdapter\SchemaConverter($this->document, $config->getRequestSchemaReferences());
+            $endpointDefinition->addPathParameter($param->getName(), $schemaConverter->parameterToProperty($param));
+
+        }
+
         if ($config->hasRequestParametersAs()) {
             // find the only operation parameter which is defined in the bodoy
             foreach ($op->getParameters() as $param) {

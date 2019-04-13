@@ -29,7 +29,7 @@ class ContainerAdderGenerator
         // Add a setter
         return $factory->method('add' . ucfirst($child->getName()))
             ->makePublic()
-            ->addParam($factory->param($child->getName())->setType($this->getVariableType($container, $child->getProperty()->getChildType())))
+            ->addParam($factory->param($child->getName())->setType($container->getPhpPropertyType()))
             ->setDocComment($this->getDocblock($container, $child)->generateDocBlock())
             ->addStmt(
                 new Node\Stmt\Expression(new Node\Expr\Assign(new Node\Expr\Variable(sprintf('this->%s[]', $child->getName())), new Node\Expr\Variable($child->getName())))
@@ -39,34 +39,6 @@ class ContainerAdderGenerator
             )
             ->setReturnType('self')
         ;
-    }
-
-
-    private function getVariableType(Container $container, \Gen\Entity\PropertyInterface $property)
-    {
-        switch (get_class($property)) {
-            case QueryParameters::class:
-            case RequestParameters::class:
-            case Container::class:
-                return sprintf(
-                    '\%s\%s',
-                    $container->getNamespace(),
-                    $container->getClass()
-                );
-            case \Gen\Entity\StringProperty::class:
-                return 'string';
-                break;
-            case \Gen\Entity\BooleanProperty::class:
-                return 'bool';
-                break;
-            case \Gen\Entity\IntegerProperty::class:
-                return 'int';
-                break;
-            case \Gen\Entity\ArrayProperty::class:
-                return 'array';
-                break;
-        }
-        return 'Unknown type';
     }
 
     private function getDocblock(Container $container, ContainerChild $child) : DocBlock

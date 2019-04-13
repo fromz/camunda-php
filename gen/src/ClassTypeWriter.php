@@ -28,6 +28,7 @@ class ClassTypeWriter
     {
         $parts = explode('\\', $namespace);
         array_shift($parts);
+        array_shift($parts);
         return implode('\\', $parts);
     }
 
