@@ -14,9 +14,9 @@ use PhpParser\Builder\Method;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 
-class ContainerJsonSerializeGenerator
+class ContainerToArrayGenerator
 {
-    public function generateJsonSerialize(Container $container) : Method
+    public function generateToArrayMethod(Container $container) : Method
     {
         $factory = new BuilderFactory;
         $ifAssignmentStatements = [];
@@ -40,7 +40,7 @@ class ContainerJsonSerializeGenerator
             ]);
             $ifAssignmentStatements[] = $if;
         }
-        return $factory->method('jsonSerialize')
+        return $factory->method('toArray')
             ->makePublic()
             ->addStmt(new Node\Expr\Assign(
                 new Node\Expr\Variable('json'),
@@ -49,6 +49,7 @@ class ContainerJsonSerializeGenerator
             ->addStmts($ifAssignmentStatements)
             ->addStmt(
                 new Node\Stmt\Return_(new Node\Expr\Variable('json'))
-            );
+            )
+            ;
     }
 }

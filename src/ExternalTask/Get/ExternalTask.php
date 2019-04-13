@@ -488,7 +488,7 @@ class ExternalTask implements \JsonSerializable
         return $this->priority;
     }
 
-    public function jsonSerialize()
+    public function toArray()
     {
         $json = array();
         if (null !== $this->activityId) {
@@ -541,6 +541,11 @@ class ExternalTask implements \JsonSerializable
         }
 
         return $json;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->toArray();
     }
 
     public static function fromArray(array $values): ExternalTask

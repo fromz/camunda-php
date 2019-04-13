@@ -104,6 +104,7 @@ class ServiceGenerator
                         );
                     }
 
+                    // make guzzle request
                     $tryStatements[] = new Node\Stmt\Expression(
                         new Node\Expr\Assign(
                             new Node\Expr\Variable('response'),

@@ -579,7 +579,7 @@ class GetListParams implements \JsonSerializable
         return $this->activityIdIn;
     }
 
-    public function jsonSerialize()
+    public function toArray()
     {
         $json = array();
         if (null !== $this->firstResult) {
@@ -653,6 +653,11 @@ class GetListParams implements \JsonSerializable
         }
 
         return $json;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->toArray();
     }
 
     public static function fromArray(array $values): GetListParams

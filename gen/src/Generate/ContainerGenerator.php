@@ -13,6 +13,7 @@ use Gen\Entity\ArrayProperty;
 use Gen\Entity\Container;
 use PhpParser\Builder\Namespace_;
 use PhpParser\BuilderFactory;
+use PhpParser\Node;
 
 class ContainerGenerator
 {
@@ -23,9 +24,9 @@ class ContainerGenerator
     private $classGenerator;
 
     /**
-     * @var ContainerJsonSerializeGenerator
+     * @var ContainerToArrayGenerator
      */
-    private $jsonSerializeGenerator;
+    private $toArrayGenerator;
 
     /**
      * @var ContainerPropertyGenerator
@@ -59,7 +60,7 @@ class ContainerGenerator
         $this->containerSetterGenerator = new ContainerSetterGenerator();
         $this->containerGetterGenerator = new ContainerGetterGenerator();
         $this->containerAdderGenerator = new ContainerAdderGenerator();
-        $this->jsonSerializeGenerator = new ContainerJsonSerializeGenerator();
+        $this->toArrayGenerator = new ContainerToArrayGenerator();
         $this->arrayFactoryGenerator = new ContainerArrayFactoryGenerator();
     }
 
@@ -82,7 +83,13 @@ class ContainerGenerator
 
         // jsonSerialize method
         $class->implement('\JsonSerializable');
-        $class->addStmt($this->jsonSerializeGenerator->generateJsonSerialize($container));
+        $class->addStmt($this->toArrayGenerator->generateToArrayMethod($container));
+        $jsonSerializeMethod = $factory->method('jsonSerialize')
+            ->makePublic()
+            ->addStmt(
+                new Node\Stmt\Return_(new Node\Expr\MethodCall(new Node\Expr\Variable('this'), 'toArray'))
+            );
+        $class->addStmt($jsonSerializeMethod);
 
         // array factory
         $class->addStmt($this->arrayFactoryGenerator->generateArrayFactory($container));
