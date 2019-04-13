@@ -13,12 +13,19 @@ use Gen\Entity\ArrayProperty;
 use Gen\Entity\Container;
 use PhpParser\Builder\Namespace_;
 use PhpParser\BuilderFactory;
-use PhpParser\Node;
 
 class ContainerGenerator
 {
 
+    /**
+     * @var ClassGenerator
+     */
     private $classGenerator;
+
+    /**
+     * @var ContainerJsonSerializeGenerator
+     */
+    private $jsonSerializeGenerator;
 
     /**
      * @var ContainerPropertyGenerator
@@ -47,6 +54,7 @@ class ContainerGenerator
         $this->containerSetterGenerator = new ContainerSetterGenerator();
         $this->containerGetterGenerator = new ContainerGetterGenerator();
         $this->containerAdderGenerator = new ContainerAdderGenerator();
+        $this->jsonSerializeGenerator = new ContainerJsonSerializeGenerator();
     }
 
     public function generate(Container $container) : Namespace_
@@ -67,40 +75,8 @@ class ContainerGenerator
         }
 
         // jsonSerialize method
-        $factory = new BuilderFactory;
         $class->implement('\JsonSerializable');
-        $ifAssignmentStatments = [];
-        foreach ($container->getChildren() as $child) {
-            $if = new Node\Stmt\If_(new Node\Expr\BinaryOp\NotIdentical(
-                new Node\Expr\PropertyFetch(new Node\Expr\Variable('this'), $child->getName()),
-                new Node\Expr\ConstFetch(new Node\Name('null'))
-            ), [
-                'stmts' => [
-                    new Node\Stmt\Expression(new Node\Expr\Assign(
-                        new Node\Expr\ArrayDimFetch(
-                            new Node\Expr\Variable('json'),
-                            new Node\Scalar\String_($child->getName())
-                        ),
-                        new Node\Expr\PropertyFetch(
-                            new Node\Expr\Variable('this'),
-                            new Node\Identifier($child->getName())
-                        )
-                    ))
-                ]
-            ]);
-            $ifAssignmentStatments[] = $if;
-        }
-        $method = $factory->method('jsonSerialize')
-            ->makePublic()
-            ->addStmt(new Node\Expr\Assign(
-                new Node\Expr\Variable('json'),
-                new Node\Expr\Array_()
-            ))
-            ->addStmts($ifAssignmentStatments)
-            ->addStmt(
-                new Node\Stmt\Return_(new Node\Expr\Variable('json'))
-            );
-        $class->addStmt($method);
+        $class->addStmt($this->jsonSerializeGenerator->generateJsonSerialize($container));
 
         $namespace->addStmt($class);
 

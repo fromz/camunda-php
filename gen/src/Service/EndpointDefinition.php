@@ -12,7 +12,6 @@ namespace Gen\Service;
 use Gen\Entity\Container;
 use Gen\Entity\PropertyInterface;
 use Gen\Generate\ExceptionGenerator;
-use PharIo\Manifest\Url;
 
 class EndpointDefinition
 {
