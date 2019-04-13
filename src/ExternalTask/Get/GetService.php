@@ -26,7 +26,7 @@ class GetService
     {
         $path = sprintf('/external-task');
         try {
-            $response = $this->guzzle->request('GET', $path, [RequestOptions::QUERY => array()]);
+            $response = $this->guzzle->request('GET', $path, [RequestOptions::QUERY => $queryParameters->toArray()]);
         } catch (\GuzzleHttp\Exception\GuzzleException $e) {
         } catch (\Exception $e) {
         }

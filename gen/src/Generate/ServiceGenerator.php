@@ -99,7 +99,7 @@ class ServiceGenerator
                     // Add query params to request if there's a reason to do so
                     if ($endpointDefinition->hasQueryParameters()) {
                         $guzzleRequestOptions[] = new Node\Expr\ArrayItem(
-                            new Node\Expr\Array_(),
+                            new Node\Expr\MethodCall(new Node\Expr\Variable('queryParameters'), 'toArray'),
                             new Node\Expr\ClassConstFetch(new Node\Name('RequestOptions'), 'QUERY')
                         );
                     }
