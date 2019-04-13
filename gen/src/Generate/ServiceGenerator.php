@@ -96,6 +96,12 @@ class ServiceGenerator
                 case 'get':
                     $guzzleRequestOptions = [];
 
+                    // disable 4xx and 5xx response codes throwing errors, manually handled
+                    $guzzleRequestOptions[] = new Node\Expr\ArrayItem(
+                        new Node\Expr\ConstFetch(new Node\Name('false')),
+                        new Node\Expr\ClassConstFetch(new Node\Name('RequestOptions'), 'HTTP_ERRORS')
+                    );
+
                     // Add query params to request if there's a reason to do so
                     if ($endpointDefinition->hasQueryParameters()) {
                         $guzzleRequestOptions[] = new Node\Expr\ArrayItem(
@@ -117,6 +123,26 @@ class ServiceGenerator
                             ])
                         )
                     );
+
+                    // Attempt to bind response JSON to response class
+                    foreach ($endpointDefinition->getResponses() as $response) {
+                        if (false === $response->isReturnType()) {
+                            continue;
+                        }
+                        /* @var $response \Gen\Service\ResponseContent */
+                        $tryStatements[] = new Node\Stmt\Expression(
+                            new Node\Expr\Assign(
+                                new Node\Expr\Variable('jsonResponse'),
+                                $factory->funcCall('\json_decode', [
+                                    $factory->methodCall(new Node\Expr\Variable('response->getBody()'), 'getContents')
+                                ])
+                            )
+                        );
+                        $tryStatements[] =
+                            new Node\Stmt\Return_($factory->staticCall($response->getFqn(), 'fromArray', [
+                                new Node\Expr\Variable('jsonResponse')
+                            ]));
+                    }
                     break;
                 case 'post':
                     $tryStatements[] = new Node\Stmt\Expression($factory->methodCall(new Node\Expr\Variable('this->guzzle'), 'post', [

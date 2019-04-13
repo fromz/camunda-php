@@ -4,6 +4,7 @@
     "type": "library",
     "license": "Apache 2",
     "require": {
+        "ext-json": "*",
         "thefrozenfire/swagger": "^2.0@dev",
         "nikic/php-parser": "^4.2"
     },

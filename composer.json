@@ -4,6 +4,7 @@
     "type": "library",
     "license": "Apache 2",
     "require": {
+        "ext-json": "*",
         "guzzlehttp/guzzle": "~6.0",
         "symfony/serializer": "^4.2",
         "symfony/property-access": "^4.2"
