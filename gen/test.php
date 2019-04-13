@@ -7,8 +7,16 @@
 
  $code = <<<'CODE'
 <?php
-
-$this->setPoo($values['poo']);
+switch ($response->getStatusCode()) {
+    case 200:
+        $jsonResponse = \json_decode($response->getBody()->getContents());
+    break;
+    case 400:
+        throw new \Exception();
+    break;
+    default:
+        throw new \Exception();
+}
 CODE;
 
  $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);

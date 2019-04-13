@@ -27,9 +27,16 @@ class GetService
         $path = sprintf('/external-task');
         try {
             $response = $this->guzzle->request('GET', $path, [RequestOptions::HTTP_ERRORS => false, RequestOptions::QUERY => $queryParameters->toArray()]);
-            $jsonResponse = \json_decode($response->getBody()->getContents());
+            switch ($response->getStatusCode()) {
+                case 200:
+                    $jsonResponse = \json_decode($response->getBody()->getContents());
 
-            return \Camunda\ExternalTask\Get\ExternalTask::fromArray($jsonResponse);
+                    return \Camunda\ExternalTask\Get\ExternalTask::fromArray($jsonResponse);
+                case 400:
+                    throw new \Camunda\ExternalTask\Get\GetExternalTaskResponseException();
+                default:
+                    throw new \Exception();
+            }
         } catch (\GuzzleHttp\Exception\GuzzleException $e) {
         } catch (\Exception $e) {
         }
@@ -40,6 +47,10 @@ class GetService
         $path = sprintf('/external-task/%s', $id);
         try {
             $response = $this->guzzle->request('GET', $path, [RequestOptions::HTTP_ERRORS => false]);
+            switch ($response->getStatusCode()) {
+                default:
+                    throw new \Exception();
+            }
         } catch (\GuzzleHttp\Exception\GuzzleException $e) {
         } catch (\Exception $e) {
         }

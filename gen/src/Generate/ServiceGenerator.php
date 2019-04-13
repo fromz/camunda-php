@@ -110,7 +110,7 @@ class ServiceGenerator
                         );
                     }
 
-                    // make guzzle request
+                    // make guzzle request, and assign to a local variable
                     $tryStatements[] = new Node\Stmt\Expression(
                         new Node\Expr\Assign(
                             new Node\Expr\Variable('response'),
@@ -124,25 +124,39 @@ class ServiceGenerator
                         )
                     );
 
-                    // Attempt to bind response JSON to response class
-                    foreach ($endpointDefinition->getResponses() as $response) {
-                        if (false === $response->isReturnType()) {
-                            continue;
+
+                    // build a switch statement on response code
+                    $responseCases = [];
+                    foreach ($endpointDefinition->getResponses() as $code => $response) {
+                        $caseStatements = [];
+                        if ($response->isReturnType()) {
+                            /* @var $response \Gen\Service\ResponseContent */
+                            $caseStatements[] = new Node\Stmt\Expression(
+                                new Node\Expr\Assign(
+                                    new Node\Expr\Variable('jsonResponse'),
+                                    $factory->funcCall('\json_decode', [
+                                        $factory->methodCall(new Node\Expr\Variable('response->getBody()'), 'getContents')
+                                    ])
+                                )
+                            );
+                            $caseStatements[] =
+                                new Node\Stmt\Return_($factory->staticCall($response->getFqn(), 'fromArray', [
+                                    new Node\Expr\Variable('jsonResponse')
+                                ]));
                         }
-                        /* @var $response \Gen\Service\ResponseContent */
-                        $tryStatements[] = new Node\Stmt\Expression(
-                            new Node\Expr\Assign(
-                                new Node\Expr\Variable('jsonResponse'),
-                                $factory->funcCall('\json_decode', [
-                                    $factory->methodCall(new Node\Expr\Variable('response->getBody()'), 'getContents')
-                                ])
-                            )
-                        );
-                        $tryStatements[] =
-                            new Node\Stmt\Return_($factory->staticCall($response->getFqn(), 'fromArray', [
-                                new Node\Expr\Variable('jsonResponse')
-                            ]));
+
+                        if ($response->isException()) {
+                            /* @var $response \Gen\Service\ResponseException */
+                            $caseStatements[] = new Node\Stmt\Throw_(new Node\Expr\New_(new Node\Name($response->getFqn())));
+                        }
+                        $responseCases[] = new Node\Stmt\Case_(new Node\Scalar\LNumber($code), $caseStatements);
                     }
+                    $responseCases[] = new Node\Stmt\Case_(null, [
+                        new Node\Stmt\Throw_(new Node\Expr\New_(new Node\Name('\Exception')))
+                    ]);
+                    $switch = new Node\Stmt\Switch_($factory->methodCall(new Node\Expr\Variable('response'), 'getStatusCode'), $responseCases);
+
+                    $tryStatements[] = $switch;
                     break;
                 case 'post':
                     $tryStatements[] = new Node\Stmt\Expression($factory->methodCall(new Node\Expr\Variable('this->guzzle'), 'post', [
