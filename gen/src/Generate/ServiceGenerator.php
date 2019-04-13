@@ -9,7 +9,6 @@
 namespace Gen\Generate;
 
 
-use Gen\Service\ResponseException;
 use Gen\Service\Service;
 use PhpParser\Builder\Namespace_;
 use PhpParser\BuilderFactory;

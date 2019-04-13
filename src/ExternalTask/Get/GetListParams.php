@@ -654,4 +654,80 @@ class GetListParams implements \JsonSerializable
 
         return $json;
     }
+
+    public static function fromArray(array $values): GetListParams
+    {
+        $container = new GetListParams();
+        if (array_key_exists('firstResult', $values)) {
+            $container->setFirstResult($values['firstResult']);
+        }
+        if (array_key_exists('maxResults', $values)) {
+            $container->setMaxResults($values['maxResults']);
+        }
+        if (array_key_exists('processInstanceId', $values)) {
+            $container->setProcessInstanceId($values['processInstanceId']);
+        }
+        if (array_key_exists('processDefinitionId', $values)) {
+            $container->setProcessDefinitionId($values['processDefinitionId']);
+        }
+        if (array_key_exists('workerId', $values)) {
+            $container->setWorkerId($values['workerId']);
+        }
+        if (array_key_exists('withRetriesLeft', $values)) {
+            $container->setWithRetriesLeft($values['withRetriesLeft']);
+        }
+        if (array_key_exists('notLocked', $values)) {
+            $container->setNotLocked($values['notLocked']);
+        }
+        if (array_key_exists('lockExpirationAfter', $values)) {
+            $container->setLockExpirationAfter($values['lockExpirationAfter']);
+        }
+        if (array_key_exists('active', $values)) {
+            $container->setActive($values['active']);
+        }
+        if (array_key_exists('suspended', $values)) {
+            $container->setSuspended($values['suspended']);
+        }
+        if (array_key_exists('activityId', $values)) {
+            $container->setActivityId($values['activityId']);
+        }
+        if (array_key_exists('executionId', $values)) {
+            $container->setExecutionId($values['executionId']);
+        }
+        if (array_key_exists('priorityLowerThanOrEquals', $values)) {
+            $container->setPriorityLowerThanOrEquals($values['priorityLowerThanOrEquals']);
+        }
+        if (array_key_exists('priorityHigherThanOrEquals', $values)) {
+            $container->setPriorityHigherThanOrEquals($values['priorityHigherThanOrEquals']);
+        }
+        if (array_key_exists('lockExpirationBefore', $values)) {
+            $container->setLockExpirationBefore($values['lockExpirationBefore']);
+        }
+        if (array_key_exists('tenantIdIn', $values)) {
+            $container->setTenantIdIn($values['tenantIdIn']);
+        }
+        if (array_key_exists('sortOrder', $values)) {
+            $container->setSortOrder($values['sortOrder']);
+        }
+        if (array_key_exists('topicName', $values)) {
+            $container->setTopicName($values['topicName']);
+        }
+        if (array_key_exists('sortBy', $values)) {
+            $container->setSortBy($values['sortBy']);
+        }
+        if (array_key_exists('noRetriesLeft', $values)) {
+            $container->setNoRetriesLeft($values['noRetriesLeft']);
+        }
+        if (array_key_exists('externalTaskId', $values)) {
+            $container->setExternalTaskId($values['externalTaskId']);
+        }
+        if (array_key_exists('locked', $values)) {
+            $container->setLocked($values['locked']);
+        }
+        if (array_key_exists('activityIdIn', $values)) {
+            $container->setActivityIdIn($values['activityIdIn']);
+        }
+
+        return $container;
+    }
 }

@@ -47,6 +47,11 @@ class ContainerGenerator
      */
     private $containerAdderGenerator;
 
+    /**
+     * @var ContainerArrayFactoryGenerator
+     */
+    private $arrayFactoryGenerator;
+
     public function __construct()
     {
         $this->classGenerator = new ClassGenerator();
@@ -55,6 +60,7 @@ class ContainerGenerator
         $this->containerGetterGenerator = new ContainerGetterGenerator();
         $this->containerAdderGenerator = new ContainerAdderGenerator();
         $this->jsonSerializeGenerator = new ContainerJsonSerializeGenerator();
+        $this->arrayFactoryGenerator = new ContainerArrayFactoryGenerator();
     }
 
     public function generate(Container $container) : Namespace_
@@ -77,6 +83,9 @@ class ContainerGenerator
         // jsonSerialize method
         $class->implement('\JsonSerializable');
         $class->addStmt($this->jsonSerializeGenerator->generateJsonSerialize($container));
+
+        // array factory
+        $class->addStmt($this->arrayFactoryGenerator->generateArrayFactory($container));
 
         $namespace->addStmt($class);
 

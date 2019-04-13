@@ -542,4 +542,59 @@ class ExternalTask implements \JsonSerializable
 
         return $json;
     }
+
+    public static function fromArray(array $values): ExternalTask
+    {
+        $container = new ExternalTask();
+        if (array_key_exists('activityId', $values)) {
+            $container->setActivityId($values['activityId']);
+        }
+        if (array_key_exists('activityInstanceId', $values)) {
+            $container->setActivityInstanceId($values['activityInstanceId']);
+        }
+        if (array_key_exists('errorMessage', $values)) {
+            $container->setErrorMessage($values['errorMessage']);
+        }
+        if (array_key_exists('errorDetails', $values)) {
+            $container->setErrorDetails($values['errorDetails']);
+        }
+        if (array_key_exists('executionId', $values)) {
+            $container->setExecutionId($values['executionId']);
+        }
+        if (array_key_exists('id', $values)) {
+            $container->setId($values['id']);
+        }
+        if (array_key_exists('lockExpirationTime', $values)) {
+            $container->setLockExpirationTime($values['lockExpirationTime']);
+        }
+        if (array_key_exists('processDefinitionId', $values)) {
+            $container->setProcessDefinitionId($values['processDefinitionId']);
+        }
+        if (array_key_exists('processDefinitionKey', $values)) {
+            $container->setProcessDefinitionKey($values['processDefinitionKey']);
+        }
+        if (array_key_exists('processInstanceId', $values)) {
+            $container->setProcessInstanceId($values['processInstanceId']);
+        }
+        if (array_key_exists('retries', $values)) {
+            $container->setRetries($values['retries']);
+        }
+        if (array_key_exists('suspended', $values)) {
+            $container->setSuspended($values['suspended']);
+        }
+        if (array_key_exists('workerId', $values)) {
+            $container->setWorkerId($values['workerId']);
+        }
+        if (array_key_exists('topicName', $values)) {
+            $container->setTopicName($values['topicName']);
+        }
+        if (array_key_exists('tenantId', $values)) {
+            $container->setTenantId($values['tenantId']);
+        }
+        if (array_key_exists('priority', $values)) {
+            $container->setPriority($values['priority']);
+        }
+
+        return $container;
+    }
 }

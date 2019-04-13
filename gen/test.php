@@ -8,7 +8,7 @@
  $code = <<<'CODE'
 <?php
 
-$json['activityId'] = $this->turd;
+$this->setPoo($values['poo']);
 CODE;
 
  $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
