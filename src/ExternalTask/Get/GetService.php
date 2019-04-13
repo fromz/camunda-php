@@ -3,6 +3,7 @@
 namespace Camunda\ExternalTask\Get;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
 
 class GetService
 {
@@ -25,7 +26,8 @@ class GetService
     {
         $path = sprintf('/external-task');
         try {
-            $this->guzzle->get($path);
+            $response = $this->guzzle->request('GET', $path, [RequestOptions::QUERY => array()]);
+        } catch (\GuzzleHttp\Exception\GuzzleException $e) {
         } catch (\Exception $e) {
         }
     }
@@ -34,7 +36,8 @@ class GetService
     {
         $path = sprintf('/external-task/%s', $id);
         try {
-            $this->guzzle->get($path);
+            $response = $this->guzzle->request('GET', $path, []);
+        } catch (\GuzzleHttp\Exception\GuzzleException $e) {
         } catch (\Exception $e) {
         }
     }
