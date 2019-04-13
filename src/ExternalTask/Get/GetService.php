@@ -23,9 +23,19 @@ class GetService
      */
     public function getList(\Camunda\ExternalTask\Get\GetListParams $queryParameters): \Camunda\ExternalTask\Get\ExternalTask
     {
+        $path = sprintf('/external-task');
+        try {
+            $this->guzzle->get($path);
+        } catch (\Exception $e) {
+        }
     }
 
     public function getById(string $id)
     {
+        $path = sprintf('/external-task/%s', $id);
+        try {
+            $this->guzzle->get($path);
+        } catch (\Exception $e) {
+        }
     }
 }

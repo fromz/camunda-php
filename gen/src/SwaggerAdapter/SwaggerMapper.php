@@ -29,6 +29,7 @@ class SwaggerMapper
     {
         $endpointDefinition = new EndpointDefinition();
         $endpointDefinition->setHttpMethod($httpMethod);
+        $endpointDefinition->setPath($path);
         $op = $this->getOperation($path, $httpMethod);
         if ($config->hasQueryParamAs()) {
             $endpointDefinition->setQueryParameters($this->applyPathParametersToQueryParameters(

@@ -72,6 +72,45 @@ class ServiceGenerator
                 }
             }
 
+            $sprintfPath = $endpointDefinition->getPath();
+            $sprintfArgs = [];
+            foreach ($endpointDefinition->getPathParameters() as $paramName => $param) {
+                $sprintfArgs[] = new Node\Arg($factory->var($paramName));
+                $sprintfPath = str_replace(sprintf('{%s}', $paramName), '%s', $sprintfPath);
+            }
+
+            $method->addStmt(
+                new Node\Stmt\Expression(
+                    new Node\Expr\Assign(
+                        new Node\Expr\Variable('path'),
+                        new Node\Expr\FuncCall(new Node\Name('sprintf'), array_merge([
+                            new Node\Scalar\String_($sprintfPath),
+                        ], $sprintfArgs))
+                    )
+                )
+            );
+
+            $tryStatements = [];
+            switch ($endpointDefinition->getHttpMethod()) {
+                case 'get':
+                    $tryStatements[] = new Node\Stmt\Expression($factory->methodCall(new Node\Expr\Variable('this->guzzle'), 'get', [
+                        new Node\Expr\Variable('path'),
+                    ]));
+                    break;
+                case 'post':
+                    $tryStatements[] = new Node\Stmt\Expression($factory->methodCall(new Node\Expr\Variable('this->guzzle'), 'post', [
+                        new Node\Expr\Variable('path'),
+                    ]));
+                    break;
+            }
+
+            $method->addStmt(
+                new Node\Stmt\TryCatch($tryStatements, [
+                    new Node\Stmt\Catch_([
+                        new Node\Name('\Exception'),
+                    ], new Node\Expr\Variable('e'))
+                ])
+            );
             $db = $db->generateDocBlock();
             if (null !== $db) {
                 $method->setDocComment($db);
